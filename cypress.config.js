@@ -11,14 +11,14 @@ module.exports = defineConfig({
     testIsolation: false,
     specPattern: "cypress/e2e/features/**/*.feature",
     async setupNodeEvents(on, config) {
-      // mantém cucumber
       await addCucumberPreprocessorPlugin(on, config);
 
-      // bundler com polyfill de crypto
       on(
         "file:preprocessor",
         createBundler({
-          platform: "node",
+          platform: "node",   // 👈 força esbuild a usar built-ins do Node
+          format: "cjs",      // 👈 garante suporte a require()
+          target: ["node16"], // 👈 compatível com Node no container
           plugins: [
             createEsbuildPlugin(config),
             {
@@ -33,19 +33,15 @@ module.exports = defineConfig({
         })
       );
 
-      // reporter mochawesome
       mochawesome(on);
-
       return config;
     },
     baseUrl: "https://www.saucedemo.com",
   },
 
-  // grava vídeos e screenshots
   video: true,
   screenshotOnRunFailure: true,
 
-  // reporter config
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
     reportDir: "reports",
