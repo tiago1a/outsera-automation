@@ -18,6 +18,7 @@ module.exports = defineConfig({
       on(
         "file:preprocessor",
         createBundler({
+          platform: "node",
           plugins: [
             createEsbuildPlugin(config),
             {
