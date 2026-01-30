@@ -1,165 +1,300 @@
-# Testes Automatizados de API – Cypress
+# 🚀 Cypress Automation Project
 
-Este projeto contém testes automatizados de API desenvolvidos com **Cypress**, como parte de um desafio técnico.  
-O objetivo é validar endpoints REST aplicando boas práticas de automação, organização de código e validações claras.
+![CI/CD Pipeline](https://github.com/tiagoamaro/outsera-cypress-automation/actions/workflows/tests.yml/badge.svg)
+![Cypress](https://img.shields.io/badge/Cypress-15.9.0-green)
+![Node.js](https://img.shields.io/badge/Node.js-18.18.0-green)
+
+Projeto de automação de testes com **Cypress** contendo testes de **API** e **E2E**, integrado em pipeline de CI/CD.
+
+---
+
+## 🎯 Features
+
+| Tipo | Descrição | Status |
+|------|-----------|--------|
+| 🔌 **API Tests** | Testes de API com JSONPlaceholder | ✅ |
+| 🌐 **E2E Tests** | Testes end-to-end com SauceDemo (Cucumber/BDD) | ✅ |
+| ⚡ **CI/CD** | Integração contínua com GitHub Actions | ✅ |
+| 📊 **Reports** | Relatórios HTML automatizados | ✅ |
 
 ---
 
 ## 🧰 Tecnologias e Ferramentas
 
-- **Node.js**
-- **Cypress**
+- **Node.js** 18.18.0
+- **Cypress** 15.9.0
 - **JavaScript**
+- **Cucumber** (BDD)
+- **GitHub Actions** (CI/CD)
+- **Mochawesome Reporter**
 - **JSONPlaceholder API**
+- **SauceDemo** (aplicação de teste E2E)
 
 ---
 
-## 🌐 API Utilizada
+## 🔌 Testes de API
 
-A API utilizada no projeto é:
+Os testes de API são executados utilizando a **JSONPlaceholder API**, uma API pública para testes.
 
-🔗 https://jsonplaceholder.typicode.com
+### 📁 Estrutura dos Testes de API
 
-Para garantir confiabilidade, previsibilidade e continuidade do desafio, foi utilizada a **JSONPlaceholder**, uma API pública amplamente adotada para testes de integração e automação, com endpoints equivalentes.
+```
+cypress/
+├── e2e/
+│   └── api/
+│       └── users.cy.js
+├── support/
+│   └── api/
+│       └── JsonPlaceholderService.js
+└── fixtures/
+    └── api/
+        └── postPayloads.json
+```
+
+### 🔧 Camada de Serviço (JsonPlaceholderService)
+
+```js
+export class JsonPlaceholderService {
+  static getPosts() {
+    return cy.request({ method: "GET", url: "/posts" })
+  }
+
+  static getPostById(id) {
+    return cy.request({ method: "GET", url: `/posts/${id}` })
+  }
+
+  static createPost(payload) {
+    return cy.request({ method: "POST", url: "/posts", body: payload })
+  }
+
+  static updatePost(id, payload) {
+    return cy.request({ method: "PUT", url: `/posts/${id}`, body: payload })
+  }
+
+  static deletePost(id) {
+    return cy.request({ method: "DELETE", url: `/posts/${id}` })
+  }
+}
+```
+
+### ✅ Cenários de Teste Implementados
+
+| Endpoint | Cenários |
+|----------|----------|
+| `GET /posts` | Validação status 200, retorno em lista |
+| `GET /posts/{id}` | Validação status 200, campos da resposta |
+| `POST /posts` | Validação status 201, estrutura do objeto criado |
+| `PUT /posts/{id}` | Validação status 200, campos atualizados |
+| `DELETE /posts/{id}` | Validação status 200 |
+
+> **⚠️ Observação:** A JSONPlaceholder é uma API simulada. As operações de POST, PUT e DELETE não persistem dados.
 
 ---
 
-### Execução dos testes de API
+## 🌐 Testes E2E (Cucumber/BDD)
 
-Os testes de API utilizam um arquivo de configuração dedicado (`cypress.api.config.js`).
+Os testes E2E utilizam **Cucumber** para implementação em BDD, testando a aplicação SauceDemo.
+
+### 📁 Estrutura dos Testes E2E
+
+```
+cypress/
+├── e2e/
+│   └── features/
+│       ├── login.feature
+│       └── checkout.feature
+├── support/
+│   ├── pages/
+│   │   ├── LoginPage.js
+│   │   ├── ProductsPage.js
+│   │   └── CheckoutPage.js
+│   └── step_definitions/
+│       ├── login.steps.js
+│       └── checkout.steps.js
+└── fixtures/
+    └── users.json
+```
+
+### 📝 Feature: Login
+
+```gherkin
+Feature: Login na aplicação
+  Como um usuário da aplicação
+  Quero realizar login
+  Para acessar páginas restritas
+
+  Scenario: Login com credenciais válidas
+    Given que estou na página de login
+    When informo usuário e senha válidos
+    Then devo ser redirecionado para a página de produtos
+
+  Scenario: Login com senha inválida
+    Given que estou na página de login
+    When informo usuário válido e senha inválida
+    Then devo visualizar uma mensagem de erro
+
+  Scenario: Login com campos obrigatórios em branco
+    Given que estou na página de login
+    When tento realizar login sem preencher os campos
+    Then devo visualizar uma mensagem de erro
+```
+
+### 📝 Feature: Checkout
+
+```gherkin
+Feature: Checkout de compra
+
+  Background:
+    Given que estou logado na aplicação
+    And adiciono um produto ao carrinho
+
+  Scenario: Finalizar compra com dados válidos
+    When preencho os dados de pagamento corretamente
+    Then a compra deve ser finalizada com sucesso
+
+  Scenario: Finalizar compra com dados inválidos
+    When tento finalizar a compra com dados inválidos
+    Then devo visualizar uma mensagem de erro no checkout
+```
+
+### 🔧 Page Objects
+
+O projeto utiliza padrão **Page Object Model** para melhor organização:
+
+- **LoginPage.js** - Elementos e ações da página de login
+- **ProductsPage.js** - Elementos e ações da página de produtos
+- **CheckoutPage.js** - Elementos e ações do checkout
+
+---
+
+## ⚡ Pipeline CI/CD
+
+O projeto está integrado com **GitHub Actions** para execução automática dos testes.
+
+### 🚦 Status da Pipeline
+
+![CI/CD Pipeline](https://github.com/tiagoamaro/outsera-cypress-automation/actions/workflows/tests.yml/badge.svg)
+
+### 📋 Fluxo da Pipeline
+
+```
+Push/PR → Checkout → Setup Node.js → Install Dependencies
+    → Run All Tests → Upload Reports → Upload Screenshots (on failure)
+    → Upload Videos (on failure)
+```
+
+### 📂 Artefatos Gerados
+
+| Artefato | Descrição |
+|----------|-----------|
+| `cypress-reports` | Relatórios de execução |
+| `cypress-screenshots` | Screenshots em caso de falha |
+| `cypress-videos` | Vídeos da execução dos testes |
+
+---
+
+## ▶️ Como Executar
+
+### 1️⃣ Instalar dependências
+
+```bash
+npm install
+```
+
+### 2️⃣ Executar testes de API
 
 ```bash
 npm run test:api
 ```
-Relatório de Testes
-Após a execução, é possível gerar um relatório HTML consolidado:
+
+### 3️⃣ Executar testes E2E
+
+```bash
+npm run test:ui
+```
+
+### 4️⃣ Executar todos os testes
+
+```bash
+npx cypress run
+```
+
+### 5️⃣ Abrir Cypress em modo interativo
+
+```bash
+npm run cypress:open
+```
+
+### 📊 Gerar Relatório Consolidado
+
 ```bash
 npm run report:merge
 npm run report:generate
 ```
-O relatório final estará disponível em:
 
-cypress/reports/report.html
----
-
-## 📁 Estrutura do Projeto
-
-cypress/
-├── e2e/
-│ └── api/
-│ └── posts.spec.js
-├── support/
-│ └── api/
-│ └── JsonPlaceholderService.js
-
-### 🔹 JsonPlaceholderService
-
-Foi criada uma **camada de serviço** para centralizar as chamadas à API, trazendo benefícios como:
-- reutilização de código
-- melhor legibilidade
-- manutenção facilitada
-- separação de responsabilidades entre testes e requisições
+O relatório estará disponível em: `cypress/reports/report.html`
 
 ---
 
-## 🔧 Exemplo da Camada de Serviço
+## 📁 Estrutura Completa do Projeto
 
-```js
-export class JsonPlaceholderService {
+```
+outsera-cypress-automation/
+├── .github/
+│   └── workflows/
+│       └── tests.yml          # Pipeline CI/CD
+├── cypress/
+│   ├── config.js              # Configuração E2E
+│   ├── api.config.js          # Configuração API
+│   ├── e2e/
+│   │   ├── api/
+│   │   │   └── users.cy.js
+│   │   └── features/
+│   │       ├── login.feature
+│   │       └── checkout.feature
+│   ├── support/
+│   │   ├── api/
+│   │   │   └── JsonPlaceholderService.js
+│   │   ├── pages/
+│   │   │   ├── LoginPage.js
+│   │   │   ├── ProductsPage.js
+│   │   │   └── CheckoutPage.js
+│   │   ├── step_definitions/
+│   │   │   ├── login.steps.js
+│   │   │   └── checkout.steps.js
+│   │   ├── commands.js
+│   │   └── e2e.js
+│   ├── fixtures/
+│   │   ├── users.json
+│   │   └── api/
+│   │       └── postPayloads.json
+│   ├── reports/               # Relatórios gerados
+│   ├── screenshots/           # Screenshots de falhas
+│   └── videos/                # Vídeos dos testes
+├── reports/                   # Relatórios consolidados
+├── package.json
+├── package-lock.json
+└── README.md
+```
 
-  static getPosts() {
-    return cy.request({
-      method: "GET",
-      url: "/posts",
-    })
-  }
+---
 
-  static getPostById(id) {
-    return cy.request({
-      method: "GET",
-      url: `/posts/${id}`,
-    })
-  }
+## 📌 Considerações Finais
 
-  static createPost(payload) {
-    return cy.request({
-      method: "POST",
-      url: "/posts",
-      body: payload,
-    })
-  }
+- **API Tests:** Arquitetura baseada em camada de serviço para chamadas de API
+- **E2E Tests:** Padrão Page Object Model com BDD (Cucumber)
+- **CI/CD:** Integração completa com GitHub Actions
+- **Reports:** Relatórios automatizados com Mochawesome
+- **Qualidade:** Foco em confiabilidade e boas práticas de automação
 
-  static updatePost(id, payload) {
-    return cy.request({
-      method: "PUT",
-      url: `/posts/${id}`,
-      body: payload,
-    })
-  }
+---
 
-  static deletePost(id) {
-    return cy.request({
-      method: "DELETE",
-      url: `/posts/${id}`,
-    })
-  }
-}
-✅ Cenários de Teste Implementados
+## 👤 Autor
 
-GET /posts
-
-Validação do status code 200
-
-Validação de retorno em formato de lista
-
-GET /posts/{id}
-
-Validação do status code 200
-
-Validação dos campos do corpo da resposta
-
-POST /posts
-
-Validação do status code 201
-
-Validação da estrutura do objeto criado
-
-PUT /posts/{id}
-
-Validação do status code 200
-
-Validação dos campos atualizados
-
-DELETE /posts/{id}
-
-Validação do status code 200
-
-⚠️ Observação:
-A JSONPlaceholder é uma API simulada (fake API).
-Portanto, as operações de POST, PUT e DELETE não persistem dados, e os testes validam apenas o comportamento da resposta, conforme esperado.
-
-▶️ Como Executar o Projeto
-1️⃣ Instalar as dependências
-npm install
-
-2️⃣ Executar os testes em modo headless
-npx cypress run
-
-3️⃣ Abrir o Cypress em modo interativo
-npx cypress open
-
-📌 Considerações Finais
-
-O projeto segue uma arquitetura baseada em camada de serviço para chamadas de API.
-
-As validações são realizadas diretamente nos testes, garantindo clareza e controle.
-
-A solução foi pensada para ser simples, organizada e facilmente extensível.
-
-O foco está na confiabilidade dos testes e na aplicação de boas práticas de automação.
-
-👤 Autor
-
-Tiago Amaro
+**Tiago Amaro**  
 QA / Automation Engineer
+
+---
+
+⭐ *Obrigado por visitar este projeto!*
 

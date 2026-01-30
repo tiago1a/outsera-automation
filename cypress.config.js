@@ -11,25 +11,40 @@ module.exports = defineConfig({
     testIsolation: false,
     specPattern: "cypress/e2e/features/**/*.feature",
     async setupNodeEvents(on, config) {
+      // mantém cucumber
       await addCucumberPreprocessorPlugin(on, config);
 
+      // bundler com polyfill de crypto
       on(
         "file:preprocessor",
         createBundler({
-          plugins: [createEsbuildPlugin(config)],
+          plugins: [
+            createEsbuildPlugin(config),
+            {
+              name: "crypto-polyfill",
+              setup(build) {
+                build.onResolve({ filter: /^crypto$/ }, () => ({
+                  path: require.resolve("crypto-browserify"),
+                }));
+              },
+            },
+          ],
         })
       );
 
+      // reporter mochawesome
       mochawesome(on);
+
       return config;
     },
     baseUrl: "https://www.saucedemo.com",
   },
 
-  // Aqui ficam as configs globais
-  video: true,                  // grava vídeos das execuções
-  screenshotOnRunFailure: true, // tira screenshots em falhas
+  // grava vídeos e screenshots
+  video: true,
+  screenshotOnRunFailure: true,
 
+  // reporter config
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
     reportDir: "reports",
