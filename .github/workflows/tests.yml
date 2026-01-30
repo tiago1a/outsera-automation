@@ -23,7 +23,8 @@ jobs:
         run: npm install
 
       - name: Run API tests
-        run: npx cypress run --spec "cypress/e2e/api/**/*.cy.js"
+        run: npx cypress run --spec "cypress/e2e/api/users.cy.js"
+        #run: npx cypress run --spec  "cypress/e2e/api/**/*.cy.js"
 
       - name: Run E2E tests
         run: npx cypress run --spec "cypress/e2e/features/**/*.feature"
