@@ -1,0 +1,11 @@
+{
+  "validPost": {
+    "title": "TIAGO QA",
+    "body": "TESTE QA",
+    "userId": 1
+  },
+  "invalidUser": {
+    "job": "QA Engineer"
+  }
+}
+

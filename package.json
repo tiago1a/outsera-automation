@@ -1,0 +1,28 @@
+{
+  "name": "outsera-cypress-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:api": "cypress run --config-file cypress.api.config.js",
+    "report:merge": "mochawesome-merge cypress/reports/*.json > cypress/reports/report.json",
+  "report:generate": "marge cypress/reports/report.json -f report -o cypress/reports",
+    "test:ui": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "cypress": "^15.9.0",
+    "esbuild": "^0.27.2",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.1.0",
+    "mochawesome-report-generator": "^6.3.2"
+  }
+}
