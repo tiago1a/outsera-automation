@@ -16,17 +16,7 @@ module.exports = defineConfig({
       on(
         "file:preprocessor",
         createBundler({
-          plugins: [
-            createEsbuildPlugin(config),
-            {
-              name: "crypto-polyfill",
-              setup(build) {
-                build.onResolve({ filter: /^crypto$/ }, () => ({
-                  path: require.resolve("crypto-browserify"),
-                }));
-              },
-            },
-          ],
+          plugins: [createEsbuildPlugin(config)],
         })
       );
 
@@ -35,6 +25,11 @@ module.exports = defineConfig({
     },
     baseUrl: "https://www.saucedemo.com",
   },
+
+  // Aqui ficam as configs globais
+  video: true,                  // grava vídeos das execuções
+  screenshotOnRunFailure: true, // tira screenshots em falhas
+
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
     reportDir: "reports",
