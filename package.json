@@ -9,7 +9,7 @@
     "cypress:run": "cypress run",
     "test:api": "cypress run --config-file cypress.api.config.js",
     "report:merge": "mochawesome-merge cypress/reports/*.json > cypress/reports/report.json",
-  "report:generate": "marge cypress/reports/report.json -f report -o cypress/reports",
+    "report:generate": "marge cypress/reports/report.json -f report -o cypress/reports",
     "test:ui": "cypress run"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
     "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
     "cypress": "^15.9.0",
+    "cypress-mochawesome-reporter": "^4.0.2",
     "esbuild": "^0.27.2",
     "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.1.0",
