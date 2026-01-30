@@ -19,6 +19,7 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "crypto-browserify": "^3.12.1",
     "cypress": "^15.9.0",
     "cypress-mochawesome-reporter": "^4.0.2",
     "esbuild": "^0.27.2",

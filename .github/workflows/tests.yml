@@ -12,26 +12,38 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.18.0
+          node-version: 18.18.0   # versão estável para evitar erro do loader
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run All tests
+      - name: Run all Cypress tests
         run: npx cypress run --spec "cypress/e2e/**/*.{cy.js,feature}"
-        #run: npx cypress run --spec "cypress/e2e/api/users.cy.js"
-        #run: npx cypress run --spec  "cypress/e2e/api/**/*.cy.js"
 
-      #- name: Run E2E tests
-        #run: npx cypress run --spec "cypress/e2e/features/**/*.feature"
-
+      # Upload relatórios
       - name: Upload test reports
         uses: actions/upload-artifact@v4
         with:
           name: cypress-reports
           path: reports
+
+      # Upload screenshots (se houver falhas)
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      # Upload vídeos (se houver falhas)
+      - name: Upload videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
