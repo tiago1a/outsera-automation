@@ -9,15 +9,11 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    container: cypress/included:15.9.0   # imagem oficial Cypress com versão fixa
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.18.0   # versão estável para evitar erro do loader
 
       - name: Install dependencies
         run: npm install
@@ -25,14 +21,12 @@ jobs:
       - name: Run all Cypress tests
         run: npx cypress run --spec "cypress/e2e/**/*.{cy.js,feature}"
 
-      # Upload relatórios
       - name: Upload test reports
         uses: actions/upload-artifact@v4
         with:
           name: cypress-reports
           path: reports
 
-      # Upload screenshots (se houver falhas)
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,7 +34,6 @@ jobs:
           name: cypress-screenshots
           path: cypress/screenshots
 
-      # Upload vídeos (se houver falhas)
       - name: Upload videos
         if: always()
         uses: actions/upload-artifact@v4
