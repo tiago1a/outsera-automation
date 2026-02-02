@@ -10,7 +10,11 @@
     "test:api": "cypress run --config-file cypress.api.config.js",
     "report:merge": "mochawesome-merge cypress/reports/*.json > cypress/reports/report.json",
     "report:generate": "marge cypress/reports/report.json -f report -o cypress/reports",
-    "test:ui": "cypress run"
+    "test:ui": "cypress run",
+    "test:load": "k6 run k6/users-load-test.js",
+    "test:load:json": "k6 run --out json=reports/k6-result.json k6/users-load-test.js",
+    "test:load:html": "node node_modules/k6-html-reporter/dist/index.js reports/k6-result.json -o reports/k6-report.html",
+    "test:load:report": "npm run test:load:json && npm run test:load:html"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +27,7 @@
     "cypress": "^15.9.0",
     "cypress-mochawesome-reporter": "^4.0.2",
     "esbuild": "^0.27.2",
+    "k6-html-reporter": "^1.0.5",
     "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.1.0",
     "mochawesome-report-generator": "^6.3.2"

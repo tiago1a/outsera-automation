@@ -2,9 +2,10 @@
 
 ![CI/CD Pipeline](https://github.com/tiagoamaro/outsera-cypress-automation/actions/workflows/tests.yml/badge.svg)
 ![Cypress](https://img.shields.io/badge/Cypress-15.9.0-green)
+![K6](https://img.shields.io/badge/K6-Load%20Tests-green)
 ![Node.js](https://img.shields.io/badge/Node.js-18.18.0-green)
 
-Projeto de automação de testes com **Cypress** contendo testes de **API** e **E2E**, integrado em pipeline de CI/CD.
+Projeto de automação de testes com **Cypress** contendo testes de **API**, **E2E** e **Carga**, integrado em pipeline de CI/CD.
 
 ---
 
@@ -14,6 +15,7 @@ Projeto de automação de testes com **Cypress** contendo testes de **API** e **
 |------|-----------|--------|
 | 🔌 **API Tests** | Testes de API com JSONPlaceholder | ✅ |
 | 🌐 **E2E Tests** | Testes end-to-end com SauceDemo (Cucumber/BDD) | ✅ |
+| ⚡ **Load Tests** | Testes de carga com K6 | ✅ |
 | ⚡ **CI/CD** | Integração contínua com GitHub Actions | ✅ |
 | 📊 **Reports** | Relatórios HTML automatizados | ✅ |
 
@@ -25,6 +27,7 @@ Projeto de automação de testes com **Cypress** contendo testes de **API** e **
 - **Cypress** 15.9.0
 - **JavaScript**
 - **Cucumber** (BDD)
+- **K6** (Load Testing)
 - **GitHub Actions** (CI/CD)
 - **Mochawesome Reporter**
 - **JSONPlaceholder API**
@@ -167,6 +170,72 @@ O projeto utiliza padrão **Page Object Model** para melhor organização:
 
 ---
 
+## ⚡ Testes de Carga (K6)
+
+Os testes de carga são realizados com **K6**, avaliando o comportamento de APIs sob alto volume de acessos simultâneos.
+
+### 📁 Estrutura dos Testes de Carga
+
+```
+k6/
+├── users-load-test.js    # Teste de carga principal
+├── README.md             # Documentação K6
+└── reports/              # Relatórios gerados
+```
+
+### 🔧 Configuração do Teste
+
+```javascript
+export const options = {
+  vus: 500,              // 500 usuários simultâneos
+  duration: '5m',        // por 5 minuto
+
+  thresholds: {
+    http_req_duration: ['p(95)<1000'], // 95% das requisições abaixo de 1s
+    http_req_failed: ['rate<0.01'],    // menos de 1% de erro
+  },
+};
+
+export default function () {
+  const res = http.get('https://reqres.in/api/users?page=2');
+
+  check(res, {
+    'status is 200': (r) => r.status === 200,
+    'response time < 1s': (r) => r.timings.duration < 1000,
+  });
+
+  sleep(1);
+}
+```
+
+### ✅ Cenários de Teste
+
+| Cenário | Configuração |
+|---------|--------------|
+| Usuários Simultâneos | 500 VUs |
+| Duração | 1 minuto |
+| API Testada | https://reqres.in/api/users |
+| Threshold | 95% das requisições < 1s |
+| Taxa de Erro | < 1% |
+
+### ▶️ Executar Testes de Carga
+
+```bash
+# Executar teste de carga básico
+npm run test:load
+
+# Executar e salvar resultado em JSON
+npm run test:load:json
+
+# Gerar relatório HTML
+npm run test:load:html
+
+# Executar e gerar relatório completo
+npm run test:load:report
+```
+
+---
+
 ## ⚡ Pipeline CI/CD
 
 O projeto está integrado com **GitHub Actions** para execução automática dos testes.
@@ -187,7 +256,7 @@ Push/PR → Checkout → Setup Node.js → Install Dependencies
 
 | Artefato | Descrição |
 |----------|-----------|
-| `cypress-reports` | Relatórios de execução |
+| `cypress-reports` | Relatórios Cypress |
 | `cypress-screenshots` | Screenshots em caso de falha |
 | `cypress-videos` | Vídeos da execução dos testes |
 
@@ -213,25 +282,17 @@ npm run test:api
 npm run test:ui
 ```
 
-### 4️⃣ Executar todos os testes
+### 4️⃣ Executar testes de carga (K6)
+
+```bash
+npm run test:load:report
+```
+
+### 5️⃣ Executar todos os testes
 
 ```bash
 npx cypress run
 ```
-
-### 5️⃣ Abrir Cypress em modo interativo
-
-```bash
-npm run cypress:open
-```
-
-### 📊 Gerar Relatório Consolidado
-
-```bash
-npm run report:merge
-npm run report:generate
-```
-
 O relatório estará disponível em: `cypress/reports/report.html`
 
 ---
@@ -242,10 +303,10 @@ O relatório estará disponível em: `cypress/reports/report.html`
 outsera-cypress-automation/
 ├── .github/
 │   └── workflows/
-│       └── tests.yml          # Pipeline CI/CD
+│       └── tests.yml              # Pipeline CI/CD
 ├── cypress/
-│   ├── config.js              # Configuração E2E
-│   ├── api.config.js          # Configuração API
+│   ├── config.js                  # Configuração E2E
+│   ├── api.config.js              # Configuração API
 │   ├── e2e/
 │   │   ├── api/
 │   │   │   └── users.cy.js
@@ -268,10 +329,13 @@ outsera-cypress-automation/
 │   │   ├── users.json
 │   │   └── api/
 │   │       └── postPayloads.json
-│   ├── reports/               # Relatórios gerados
-│   ├── screenshots/           # Screenshots de falhas
-│   └── videos/                # Vídeos dos testes
-├── reports/                   # Relatórios consolidados
+│   ├── reports/                   # Relatórios gerados
+│   ├── screenshots/               # Screenshots de falhas
+│   └── videos/                    # Vídeos dos testes
+├── k6/
+│   ├── users-load-test.js         # Teste de carga K6
+│   └── README.md                  # Documentação K6
+├── reports/                       # Relatórios consolidados
 ├── package.json
 ├── package-lock.json
 └── README.md
@@ -283,8 +347,9 @@ outsera-cypress-automation/
 
 - **API Tests:** Arquitetura baseada em camada de serviço para chamadas de API
 - **E2E Tests:** Padrão Page Object Model com BDD (Cucumber)
+- **Load Tests:** Testes de performance com K6 (500 VUs, thresholds configurados)
 - **CI/CD:** Integração completa com GitHub Actions
-- **Reports:** Relatórios automatizados com Mochawesome
+- **Reports:** Relatórios automatizados com Mochawesome e K6 HTML Reporter
 - **Qualidade:** Foco em confiabilidade e boas práticas de automação
 
 ---
