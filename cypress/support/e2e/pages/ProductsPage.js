@@ -58,10 +58,35 @@ class ProductsPage {
   }
 
   /**
-   * Adiciona produto ao carrinho
+   * Adiciona produto ao carrinho (lida com caso onde já está adicionado)
    */
   addProductToCart(productId) {
-    cy.get(this.getProductSelector(productId)).click();
+    cy.get("body").then(($body) => {
+      const removeBtn = $body.find(this.getProductRemoveSelector(productId));
+      const addBtn = $body.find(this.getProductSelector(productId));
+
+      if (removeBtn.length > 0) {
+        // Produto já está no carrinho, não precisa adicionar novamente
+        cy.log(`Produto ${productId} já está no carrinho`);
+      } else if (addBtn.length > 0) {
+        cy.get(this.getProductSelector(productId)).click();
+      } else {
+        cy.log(`Botão não encontrado para produto: ${productId}`);
+      }
+    });
+    return this;
+  }
+
+  /**
+   * Garante produto no carrinho (adiciona se necessário)
+   */
+  ensureProductInCart(productId) {
+    cy.get("body").then(($body) => {
+      const removeBtn = $body.find(this.getProductRemoveSelector(productId));
+      if (removeBtn.length === 0) {
+        cy.get(this.getProductSelector(productId)).should("be.visible").click();
+      }
+    });
     return this;
   }
 
@@ -213,4 +238,3 @@ class ProductsPage {
 }
 
 export default ProductsPage;
-

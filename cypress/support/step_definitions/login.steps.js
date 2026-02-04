@@ -53,6 +53,6 @@ Then("devo visualizar a mensagem {string}", (message) => {
   cy.contains("[data-test='error']", message).should("be.visible");
 });
 
-Then("devo visualizar a mensagem de erro de campo obrigatório", () => {
+Then("devo visualizar a mensagem de erro de login obrigatório", () => {
   loginPage.verifyErrorMessage(ERROR_MESSAGES.USERNAME_REQUIRED);
 });

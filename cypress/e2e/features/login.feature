@@ -20,9 +20,9 @@ Feature: Login na aplicação
   Scenario: Login com campos obrigatórios em branco
     Given que estou na página de login
     When tento realizar login sem preencher os campos
-    Then devo visualizar a mensagem de erro de campo obrigatório
+    Then devo visualizar a mensagem de erro de login obrigatório
 
-  @positive
+  @negative
   Scenario: Login com usuário bloqueado
     Given que estou na página de login
     When informo usuário "locked_out" e senha "secret_sauce"
