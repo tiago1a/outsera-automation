@@ -45,13 +45,13 @@ Os testes de API são executados utilizando a **JSONPlaceholder API**, uma API p
 cypress/
 ├── e2e/
 │   └── api/
-│       └── users.cy.js
+│       └── users.cy.js           # Testes de API
 ├── support/
 │   └── api/
-│       └── JsonPlaceholderService.js
+│       └── JsonPlaceholderService.js  # Camada de serviço
 └── fixtures/
     └── api/
-        └── postPayloads.json
+        └── postPayloads.json    # Payloads de teste
 ```
 
 ### ✅ Cenários de Teste Implementados
@@ -77,20 +77,23 @@ Os testes E2E utilizam **Cucumber** para implementação em BDD, testando a apli
 cypress/
 ├── e2e/
 │   └── features/
-│       ├── login.feature
-│       └── checkout.feature
+│       ├── login.feature       # Feature de Login
+│       └── checkout.feature    # Feature de Checkout
 ├── support/
-│   ├── pages/
-│   │   ├── LoginPage.js
-│   │   ├── ProductsPage.js
-│   │   └── CheckoutPage.js
 │   ├── step_definitions/
-│   │   ├── login.steps.js
-│   │   └── checkout.steps.js
-│   ├── constants/
-│   │   └── Messages.js
-│   └── helpers/
-│       └── AssertionHelper.js
+│   │   ├── login.steps.js     # Steps de Login
+│   │   └── checkout.steps.js   # Steps de Checkout
+│   ├── e2e/
+│   │   ├── pages/
+│   │   │   ├── LoginPage.js
+│   │   │   ├── ProductsPage.js
+│   │   │   └── CheckoutPage.js
+│   │   ├── constants/
+│   │   │   └── Messages.js
+│   │   └── helpers/
+│   │       └── AssertionHelper.js
+│   ├── commands.js
+│   └── e2e.js
 └── fixtures/
     ├── users.json
     └── products.json
@@ -319,29 +322,32 @@ outsera-cypress-automation/
 │   ├── api.config.js              # Configuração API
 │   ├── e2e/
 │   │   ├── api/
-│   │   │   └── users.cy.js      # Testes de API
+│   │   │   └── users.cy.js        # Testes de API
 │   │   └── features/
-│   │       ├── login.feature     # Feature Login
-│   │       └── checkout.feature  # Feature Checkout
+│   │       ├── login.feature      # Feature Login
+│   │       └── checkout.feature   # Feature Checkout
 │   ├── support/
 │   │   ├── api/
 │   │   │   └── JsonPlaceholderService.js
-│   │   ├── pages/
-│   │   │   ├── LoginPage.js
-│   │   │   ├── ProductsPage.js
-│   │   │   └── CheckoutPage.js
 │   │   ├── step_definitions/
 │   │   │   ├── login.steps.js
 │   │   │   └── checkout.steps.js
-│   │   ├── constants/
-│   │   │   └── Messages.js
-│   │   ├── helpers/
-│   │   │   └── AssertionHelper.js
+│   │   ├── e2e/
+│   │   │   ├── pages/
+│   │   │   │   ├── LoginPage.js
+│   │   │   │   ├── ProductsPage.js
+│   │   │   │   └── CheckoutPage.js
+│   │   │   ├── constants/
+│   │   │   │   └── Messages.js
+│   │   │   └── helpers/
+│   │   │       └── AssertionHelper.js
 │   │   ├── commands.js
 │   │   └── e2e.js
 │   ├── fixtures/
 │   │   ├── users.json
-│   │   └── products.json
+│   │   ├── products.json
+│   │   └── api/
+│   │       └── postPayloads.json
 │   ├── reports/                   # Relatórios gerados
 │   ├── screenshots/              # Screenshots de falhas
 │   └── videos/                   # Vídeos dos testes
