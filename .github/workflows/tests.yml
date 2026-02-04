@@ -1,15 +1,18 @@
-name: Run Cypress Tests
+name: Cypress Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  cypress-run:
+  # ============================================
+  # Testes de API (JSONPlaceholder)
+  # ============================================
+  api-tests:
     runs-on: ubuntu-latest
-    container: cypress/included:15.9.0   # imagem oficial Cypress com versão fixa
+    container: cypress/included:15.9.0
 
     steps:
       - name: Checkout repo
@@ -18,25 +21,64 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run all Cypress tests
-        run: npx cypress run --spec "cypress/e2e/**/*.{cy.js,feature}"
+      - name: Run API tests
+        run: |
+          npx cypress run \
+            --config-file cypress.api.config.js \
+            --spec "cypress/e2e/api/**/*.cy.js"
 
-      - name: Upload test reports
+      - name: Upload API test reports
         uses: actions/upload-artifact@v4
-        with:
-          name: cypress-reports
-          path: reports
-
-      - name: Upload screenshots
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: cypress-screenshots
+          name: api-test-reports
+          path: cypress/reports
+
+      - name: Upload API screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-screenshots
           path: cypress/screenshots
 
-      - name: Upload videos
-        if: always()
+  # ============================================
+  # Testes E2E (SauceDemo com Cucumber)
+  # ============================================
+  e2e-tests:
+    runs-on: ubuntu-latest
+    container: cypress/included:15.9.0
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run E2E tests
+        run: |
+          npx cypress run \
+            --config-file cypress.config.js \
+            --spec "cypress/e2e/features/**/*.feature"
+
+      - name: Upload E2E test reports
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: cypress-videos
+          name: e2e-test-reports
+          path: reports
+
+      - name: Upload E2E screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-screenshots
+          path: cypress/screenshots
+
+      - name: Upload E2E videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-videos
           path: cypress/videos
+
