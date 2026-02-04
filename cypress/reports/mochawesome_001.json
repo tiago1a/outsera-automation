@@ -1,0 +1,705 @@
+{
+  "stats": {
+    "suites": 9,
+    "tests": 20,
+    "passes": 0,
+    "pending": 0,
+    "failures": 20,
+    "start": "2026-02-04T12:25:51.975Z",
+    "end": "2026-02-04T12:26:00.014Z",
+    "duration": 8039,
+    "testsRegistered": 20,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "0de20cf4-44d6-4e0c-98f5-11fb57a14354",
+      "title": "",
+      "fullFile": "cypress/e2e/api/users.cy.js",
+      "file": "cypress/e2e/api/users.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "78753c8c-c21c-4363-9e60-1a81ae7bf20e",
+          "title": "JSONPlaceholder API - Posts (Escalável)",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [],
+          "suites": [
+            {
+              "uuid": "381294db-58d4-43a0-90c1-92dccd51fa52",
+              "title": "GET /posts",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should return list of posts",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts should return list of posts",
+                  "timedOut": null,
+                  "duration": 441,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const response = _JsonPlaceholderService.default.getAllPosts();\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectArray(response);\n_JsonPlaceholderService.default.validatePostsListStructure(response);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:16:20)",
+                    "diff": null
+                  },
+                  "uuid": "13ed4893-1d8e-4680-90b3-5fe624366a5b",
+                  "parentUUID": "381294db-58d4-43a0-90c1-92dccd51fa52",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should return posts with valid structure",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts should return posts with valid structure",
+                  "timedOut": null,
+                  "duration": 1464,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const response = _JsonPlaceholderService.default.getAllPosts();\nconst firstPost = response.body[0];\n_ApiAssertions.default.expectProperties(firstPost, ['userId', 'id', 'title', 'body']);\n_ApiAssertions.default.expectType(response.body[0], 'userId', 'number');\n_ApiAssertions.default.expectType(response.body[0], 'id', 'number');\n_ApiAssertions.default.expectType(response.body[0], 'title', 'string');\n_ApiAssertions.default.expectType(response.body[0], 'body', 'string');",
+                  "err": {
+                    "message": "TypeError: Cannot read properties of undefined (reading '0')",
+                    "estack": "TypeError: Cannot read properties of undefined (reading '0')\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:24:38)\n    at runnable.fn (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:146323:19)\n    at callFn (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:165438:21)\n    at Runnable.run (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:165425:7)\n    at <unknown> (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:171523:30)\n    at PassThroughHandlerContext.finallyHandler (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:4042:23)\n    at PassThroughHandlerContext.tryCatcher (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1546:18)",
+                    "diff": null
+                  },
+                  "uuid": "aa846af7-cf01-4bf8-b530-dad49d2f2c59",
+                  "parentUUID": "381294db-58d4-43a0-90c1-92dccd51fa52",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should return posts within acceptable response time",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts should return posts within acceptable response time",
+                  "timedOut": null,
+                  "duration": 311,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const response = _JsonPlaceholderService.default.getAllPosts();\n_ApiAssertions.default.expectResponseTime(response, 2000);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to be a number or a date",
+                    "estack": "AssertionError: expected undefined to be a number or a date\n    at ApiAssertions.expectResponseTime (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:31:4)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:35:20)",
+                    "diff": null
+                  },
+                  "uuid": "38f2f99a-dc32-4916-ae76-0a46d63beb1a",
+                  "parentUUID": "381294db-58d4-43a0-90c1-92dccd51fa52",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "13ed4893-1d8e-4680-90b3-5fe624366a5b",
+                "aa846af7-cf01-4bf8-b530-dad49d2f2c59",
+                "38f2f99a-dc32-4916-ae76-0a46d63beb1a"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 2216,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "811e849f-e55c-42f2-a618-5c6ed7879e81",
+              "title": "GET /posts/{id}",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should return single post by ID",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts/{id} should return single post by ID",
+                  "timedOut": null,
+                  "duration": 327,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst response = _JsonPlaceholderService.default.getPostById(postId);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectProperty(response, 'id', postId);\n_ApiAssertions.default.expectProperty(response, 'userId');\n_ApiAssertions.default.expectProperty(response, 'title');\n_ApiAssertions.default.expectProperty(response, 'body');",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:44:20)",
+                    "diff": null
+                  },
+                  "uuid": "5da84af2-b694-408e-a5af-ce705cd21d0c",
+                  "parentUUID": "811e849f-e55c-42f2-a618-5c6ed7879e81",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should return 404 for non-existent post",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts/{id} should return 404 for non-existent post",
+                  "timedOut": null,
+                  "duration": 354,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const nonExistentId = 9999;\nconst response = _JsonPlaceholderService.default.getPostById(nonExistentId, {\n  failOnStatusCode: false\n});\n_ApiAssertions.default.expectStatus(response, 404);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 404",
+                    "estack": "AssertionError: expected undefined to equal 404\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:57:20)",
+                    "diff": null
+                  },
+                  "uuid": "b4750bfb-eb64-4ffa-a241-8be880cd4309",
+                  "parentUUID": "811e849f-e55c-42f2-a618-5c6ed7879e81",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should validate post structure",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) GET /posts/{id} should validate post structure",
+                  "timedOut": null,
+                  "duration": 341,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst response = _JsonPlaceholderService.default.getPostById(postId);\n_JsonPlaceholderService.default.validatePostStructure(response);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at JsonPlaceholderService.validatePostStructure (webpack://outsera-cypress-automation/./cypress/support/api/services/JsonPlaceholderService.js:112:18)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:64:29)",
+                    "diff": null
+                  },
+                  "uuid": "5ff81c67-d6ef-47d2-8559-1ea1ba2c3869",
+                  "parentUUID": "811e849f-e55c-42f2-a618-5c6ed7879e81",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "5da84af2-b694-408e-a5af-ce705cd21d0c",
+                "b4750bfb-eb64-4ffa-a241-8be880cd4309",
+                "5ff81c67-d6ef-47d2-8559-1ea1ba2c3869"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 1022,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "dd5b7e75-3638-4f79-ba11-efe4d22a243f",
+              "title": "POST /posts",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should create a new post with valid payload",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) POST /posts should create a new post with valid payload",
+                  "timedOut": null,
+                  "duration": 332,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const payload = _PostFactory.default.createValid();\nconst response = _JsonPlaceholderService.default.createPost(payload);\n_ApiAssertions.default.expectStatus(response, 201);\n_ApiAssertions.default.expectCreatedId(response);\n_ApiAssertions.default.expectProperty(response, 'title', payload.title);\n_ApiAssertions.default.expectProperty(response, 'body', payload.body);\n_ApiAssertions.default.expectProperty(response, 'userId', payload.userId);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:73:20)",
+                    "diff": null
+                  },
+                  "uuid": "89db0a55-6416-4800-a029-fb82ed64fd35",
+                  "parentUUID": "dd5b7e75-3638-4f79-ba11-efe4d22a243f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should create post with extra fields (ignored by API)",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) POST /posts should create post with extra fields (ignored by API)",
+                  "timedOut": null,
+                  "duration": 308,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const payload = _PostFactory.default.createWithExtraFields();\nconst response = _JsonPlaceholderService.default.createPost(payload);\n_ApiAssertions.default.expectStatus(response, 201);\n_ApiAssertions.default.expectCreatedId(response);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:84:20)",
+                    "diff": null
+                  },
+                  "uuid": "04bc3377-f580-42f3-b954-21984e824517",
+                  "parentUUID": "dd5b7e75-3638-4f79-ba11-efe4d22a243f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should fail with invalid userId",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) POST /posts should fail with invalid userId",
+                  "timedOut": null,
+                  "duration": 329,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const payload = _PostFactory.default.createWithInvalidUserId();\nconst response = _JsonPlaceholderService.default.createPost(payload, {\n  failOnStatusCode: false\n});\n_ApiAssertions.default.expectStatus(response, 201);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:94:20)",
+                    "diff": null
+                  },
+                  "uuid": "235e45a0-801e-4cda-990a-eb8aa22f7403",
+                  "parentUUID": "dd5b7e75-3638-4f79-ba11-efe4d22a243f",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should fail with missing required fields",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) POST /posts should fail with missing required fields",
+                  "timedOut": null,
+                  "duration": 332,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const payload = {\n  title: 'Test'\n};\nconst response = _JsonPlaceholderService.default.createPost(payload, {\n  failOnStatusCode: false\n});\n_ApiAssertions.default.expectStatus(response, 201);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:103:20)",
+                    "diff": null
+                  },
+                  "uuid": "2924ba34-5b22-496f-9a61-38dcd50dd8c1",
+                  "parentUUID": "dd5b7e75-3638-4f79-ba11-efe4d22a243f",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "89db0a55-6416-4800-a029-fb82ed64fd35",
+                "04bc3377-f580-42f3-b954-21984e824517",
+                "235e45a0-801e-4cda-990a-eb8aa22f7403",
+                "2924ba34-5b22-496f-9a61-38dcd50dd8c1"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 1301,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "507e1fa1-7bd4-4ea2-ae36-94e83ff19ebb",
+              "title": "PUT /posts/{id}",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should update post with valid payload",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) PUT /posts/{id} should update post with valid payload",
+                  "timedOut": null,
+                  "duration": 305,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst payload = _PostFactory.default.createValid();\nconst response = _JsonPlaceholderService.default.updatePost(postId, payload);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectProperty(response, 'id', postId);\n_ApiAssertions.default.expectProperty(response, 'title', payload.title);\n_ApiAssertions.default.expectProperty(response, 'body', payload.body);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:113:20)",
+                    "diff": null
+                  },
+                  "uuid": "e22a89e7-87af-4739-a234-3c5b0a7e3b9c",
+                  "parentUUID": "507e1fa1-7bd4-4ea2-ae36-94e83ff19ebb",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should update only specific fields with partial data",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) PUT /posts/{id} should update only specific fields with partial data",
+                  "timedOut": null,
+                  "duration": 323,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst payload = _PostFactory.default.createPartial();\nconst response = _JsonPlaceholderService.default.updatePost(postId, payload);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectProperty(response, 'title', payload.title);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:124:20)",
+                    "diff": null
+                  },
+                  "uuid": "709e30f6-8799-4dcc-bcc9-239ae7430be5",
+                  "parentUUID": "507e1fa1-7bd4-4ea2-ae36-94e83ff19ebb",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "e22a89e7-87af-4739-a234-3c5b0a7e3b9c",
+                "709e30f6-8799-4dcc-bcc9-239ae7430be5"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 628,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "9e1a678e-1896-40f8-adcf-9b757f417053",
+              "title": "PATCH /posts/{id}",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should partially update post",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) PATCH /posts/{id} should partially update post",
+                  "timedOut": null,
+                  "duration": 268,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst payload = {\n  title: 'Updated Title'\n};\nconst response = _JsonPlaceholderService.default.patchPost(postId, payload);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectProperty(response, 'title', payload.title);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:135:20)",
+                    "diff": null
+                  },
+                  "uuid": "df7ccf49-ac47-4c0d-94b1-86a5ff0162d6",
+                  "parentUUID": "9e1a678e-1896-40f8-adcf-9b757f417053",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should update multiple fields",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) PATCH /posts/{id} should update multiple fields",
+                  "timedOut": null,
+                  "duration": 277,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst payload = _PostFactory.default.createValid();\nconst response = _JsonPlaceholderService.default.patchPost(postId, payload);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectProperty(response, 'title', payload.title);\n_ApiAssertions.default.expectProperty(response, 'body', payload.body);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:144:20)",
+                    "diff": null
+                  },
+                  "uuid": "606e588f-d10b-44d4-b543-a7a816c136ff",
+                  "parentUUID": "9e1a678e-1896-40f8-adcf-9b757f417053",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "df7ccf49-ac47-4c0d-94b1-86a5ff0162d6",
+                "606e588f-d10b-44d4-b543-a7a816c136ff"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 545,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "04a805d0-24e0-440e-8c8e-d39c3c00c383",
+              "title": "DELETE /posts/{id}",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should delete existing post",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) DELETE /posts/{id} should delete existing post",
+                  "timedOut": null,
+                  "duration": 322,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const postId = 1;\nconst response = _JsonPlaceholderService.default.deletePost(postId);\n_ApiAssertions.default.expectStatus(response, 200);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:155:20)",
+                    "diff": null
+                  },
+                  "uuid": "dbaf0cb8-b912-4f38-856a-a00e2b5b8934",
+                  "parentUUID": "04a805d0-24e0-440e-8c8e-d39c3c00c383",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should return 200 for non-existent post (API behavior)",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) DELETE /posts/{id} should return 200 for non-existent post (API behavior)",
+                  "timedOut": null,
+                  "duration": 295,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const nonExistentId = 9999;\nconst response = _JsonPlaceholderService.default.deletePost(nonExistentId, {\n  failOnStatusCode: false\n});\n_ApiAssertions.default.expectStatus(response, 200);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:164:20)",
+                    "diff": null
+                  },
+                  "uuid": "e0786dea-44ef-4380-9273-14d7d49c813f",
+                  "parentUUID": "04a805d0-24e0-440e-8c8e-d39c3c00c383",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "dbaf0cb8-b912-4f38-856a-a00e2b5b8934",
+                "e0786dea-44ef-4380-9273-14d7d49c813f"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 617,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "fbcc05c3-ad55-4a6c-9cf5-850bd2e137aa",
+              "title": "Custom Endpoints",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should filter posts by user ID",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) Custom Endpoints should filter posts by user ID",
+                  "timedOut": null,
+                  "duration": 327,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const userId = 1;\nconst response = _JsonPlaceholderService.default.getPostsByUser(userId);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectArray(response);\nresponse.body.forEach(post => {\n  expect(post.userId).to.eq(userId);\n});",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:173:20)",
+                    "diff": null
+                  },
+                  "uuid": "825f17d4-4179-4acb-9a7c-1d720115230c",
+                  "parentUUID": "fbcc05c3-ad55-4a6c-9cf5-850bd2e137aa",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should return posts with pagination",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) Custom Endpoints should return posts with pagination",
+                  "timedOut": null,
+                  "duration": 334,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const page = 1;\nconst perPage = 5;\nconst response = _JsonPlaceholderService.default.getPostsPaginated(page, perPage);\n_ApiAssertions.default.expectStatus(response, 200);\n_ApiAssertions.default.expectArrayLength(response, perPage);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 200",
+                    "estack": "AssertionError: expected undefined to equal 200\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:186:20)",
+                    "diff": null
+                  },
+                  "uuid": "11b305e9-a6cb-4dd4-a5ef-0bcfb0b97fde",
+                  "parentUUID": "fbcc05c3-ad55-4a6c-9cf5-850bd2e137aa",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "825f17d4-4179-4acb-9a7c-1d720115230c",
+                "11b305e9-a6cb-4dd4-a5ef-0bcfb0b97fde"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 661,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            },
+            {
+              "uuid": "1ff19086-d11a-4e65-9163-080a184d4c42",
+              "title": "Integration Tests",
+              "fullFile": "",
+              "file": "",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "should create, update, and delete a post",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) Integration Tests should create, update, and delete a post",
+                  "timedOut": null,
+                  "duration": 272,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "// Create\nconst createPayload = _PostFactory.default.createValid();\nconst createResponse = _JsonPlaceholderService.default.createPost(createPayload);\n_ApiAssertions.default.expectStatus(createResponse, 201);\nconst createdId = createResponse.body.id;\n// Verify created\nawait _JsonPlaceholderService.default.verifyPostExists(createdId);\n// Update\nconst updatePayload = _PostFactory.default.create();\nconst updateResponse = _JsonPlaceholderService.default.updatePost(createdId, updatePayload);\n_ApiAssertions.default.expectStatus(updateResponse, 200);\n_ApiAssertions.default.expectProperty(updateResponse, 'title', updatePayload.title);\n// Delete\nconst deleteResponse = _JsonPlaceholderService.default.deletePost(createdId);\n_ApiAssertions.default.expectStatus(deleteResponse, 200);\n// Verify deleted\nawait _JsonPlaceholderService.default.verifyPostDeleted(createdId);",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (https://jsonplaceholder.typicode.com/__cypress/tests?p=cypress/e2e/api/users.cy.js:366:32)\n    at Context.eval (https://jsonplaceholder.typicode.com/__cypress/tests?p=cypress/e2e/api/users.cy.js:962:30)\n    at __stackReplacementMarker (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:145524:13)\n    at runnable.fn (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:146323:19)\n    at callFn (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:165438:21)\n    at Runnable.run (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:165425:7)\n    at https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:171523:30\n    at PassThroughHandlerContext.finallyHandler (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:4042:23)\n    at PassThroughHandlerContext.tryCatcher (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1777:23)\n    at Promise._settlePromiseFromHandler (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1489:31)\n    at Promise._settlePromise (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1615:18)\n    at Promise._settlePromise (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1559:21)\n    at Promise._settlePromise0 (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1591:10)\n    at Promise._settlePromises (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1671:18)\n    at Promise._fulfill (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1615:18)\n    at Promise._resolveCallback (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1409:57)\n    at Promise._settlePromiseFromHandler (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1501:17)\n    at Promise._settlePromise (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1546:18)\n    at Promise._settlePromise0 (https://jsonplaceholder.typicode.com/__cypress/runner/cypress_runner.js:1591:10)",
+                    "diff": null
+                  },
+                  "uuid": "082f0e6e-3bcd-4c63-8c04-73e81f8213c6",
+                  "parentUUID": "1ff19086-d11a-4e65-9163-080a184d4c42",
+                  "isHook": false,
+                  "skipped": false
+                },
+                {
+                  "title": "should perform CRUD operations in batch",
+                  "fullTitle": "JSONPlaceholder API - Posts (Escalável) Integration Tests should perform CRUD operations in batch",
+                  "timedOut": null,
+                  "duration": 279,
+                  "state": "failed",
+                  "speed": null,
+                  "pass": false,
+                  "fail": true,
+                  "pending": false,
+                  "context": null,
+                  "code": "const posts = _PostFactory.default.createMultiple(3);\nposts.forEach(payload => {\n  const response = _JsonPlaceholderService.default.createPost(payload);\n  _ApiAssertions.default.expectStatus(response, 201);\n  _ApiAssertions.default.expectCreatedId(response);\n  _ApiAssertions.default.expectProperty(response, 'title', payload.title);\n  _ApiAssertions.default.expectProperty(response, 'body', payload.body);\n});",
+                  "err": {
+                    "message": "AssertionError: expected undefined to equal 201",
+                    "estack": "AssertionError: expected undefined to equal 201\n    at ApiAssertions.expectStatus (webpack://outsera-cypress-automation/./cypress/support/api/helpers/ApiAssertions.js:10:31)\n    at eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:222:22)\nat Array.forEach (<anonymous>)\n    at Context.eval (webpack://outsera-cypress-automation/./cypress/e2e/api/users.cy.js:219:12)",
+                    "diff": null
+                  },
+                  "uuid": "264cf857-fb57-4c17-971d-d0946026d891",
+                  "parentUUID": "1ff19086-d11a-4e65-9163-080a184d4c42",
+                  "isHook": false,
+                  "skipped": false
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [
+                "082f0e6e-3bcd-4c63-8c04-73e81f8213c6",
+                "264cf857-fb57-4c17-971d-d0946026d891"
+              ],
+              "pending": [],
+              "skipped": [],
+              "duration": 551,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": [],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 0,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
