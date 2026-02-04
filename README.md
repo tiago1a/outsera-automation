@@ -58,10 +58,23 @@ cypress/
 
 | Endpoint | Cenários |
 |----------|----------|
-| `GET /posts` | Validação status 200, retorno em lista |
-| `POST /posts` | Validação status 201, estrutura do objeto criado |
-| `PUT /posts/{id}` | Validação status 200, campos atualizados |
-| `DELETE /posts/{id}` | Validação status 200 |
+| `GET /posts` | Retornar lista de posts, validar estrutura (keys: userId, id, title, body) |
+| `GET /posts/{id}` | Retornar post específico, retornar 404 para post não existente |
+| `POST /posts` | Criar post com payload válido, tratar payload inválido, criar post com título mínimo |
+| `PUT /posts/{id}` | Atualizar post completamente, atualizar apenas campos específicos |
+| `PATCH /posts/{id}` | Atualização parcial de post, atualizar apenas o body |
+| `DELETE /posts/{id}` | Deletar post, retornar 200 para post não existente |
+
+### 📊 Resumo dos Testes de API
+
+| Método | Quantidade de Cenários |
+|--------|------------------------|
+| GET | 4 cenários |
+| POST | 3 cenários |
+| PUT | 2 cenários |
+| PATCH | 2 cenários |
+| DELETE | 2 cenários |
+| **Total** | **12 cenários** |
 
 > **⚠️ Observação:** A JSONPlaceholder é uma API simulada. As operações de POST, PUT e DELETE não persistem dados.
 
@@ -92,11 +105,16 @@ cypress/
 │   │   │   └── Messages.js
 │   │   └── helpers/
 │   │       └── AssertionHelper.js
+│   ├── pages/
+│   │   ├── LoginPage.js
+│   │   ├── ProductsPage.js
+│   │   └── CheckoutPage.js
 │   ├── commands.js
 │   └── e2e.js
 └── fixtures/
     ├── users.json
-    └── products.json
+    ├── products.json
+    └── environments.json
 ```
 
 ### 🎯 Padrões Implementados nos Testes E2E
@@ -128,28 +146,56 @@ Feature: Login na aplicação
     Given que estou na página de login
     When informo usuário válido e senha inválida
     Then devo visualizar uma mensagem de erro
+
+  @negative @validation
+  Scenario: Login com campos obrigatórios em branco
+    Given que estou na página de login
+    When tento realizar login sem preencher os campos
+    Then devo visualizar a mensagem de erro de login obrigatório
+
+  @negative
+  Scenario: Login com usuário bloqueado
+    Given que estou na página de login
+    When informo usuário "locked_out" e senha "secret_sauce"
+    Then devo visualizar uma mensagem de erro
 ```
 
 ### 📝 Feature: Checkout
 
 ```gherkin
-@checkout @smoke
+@checkout
 Feature: Checkout de compra
   Como um usuário da aplicação
   Quero finalizar minha compra
   Para completar o processo de compra
 
-  Background:
-    Given que estou logado na aplicação
-    And adiciono um produto ao carrinho
-    And acesso o carrinho de compras
-    And clico no botão de checkout
-
   @positive
   Scenario: Finalizar compra com dados válidos
-    When preencho os dados de pagamento corretamente
+    Given que estou logado com usuário "standard"
+    And adiciono um produto ao carrinho
+    And estou na página de checkout
+    When preencho os dados de checkout com dados válidos
+    And clico em continue
     And finalizo a compra
     Then a compra deve ser finalizada com sucesso
+
+  @negative @validation
+  Scenario: Checkout com campos obrigatórios em branco
+    Given que estou logado com usuário "standard"
+    And adiciono um produto ao carrinho
+    And estou na página de checkout
+    When preencho os dados de checkout com dados inválidos
+    And clico em continue
+    Then devo visualizar a mensagem de erro de checkout obrigatório
+
+  @negative @validation
+  Scenario: Checkout com postal code vazio
+    Given que estou logado com usuário "standard"
+    And adiciono um produto ao carrinho
+    And estou na página de checkout
+    When preencho apenas nome e sobrenome
+    And clico em continue
+    Then devo visualizar a mensagem de erro de postal code obrigatório
 ```
 
 ### 🔧 Page Objects
@@ -341,11 +387,16 @@ outsera-cypress-automation/
 │   │   │   │   └── Messages.js
 │   │   │   └── helpers/
 │   │   │       └── AssertionHelper.js
+│   │   ├── pages/
+│   │   │   ├── LoginPage.js
+│   │   │   ├── ProductsPage.js
+│   │   │   └── CheckoutPage.js
 │   │   ├── commands.js
 │   │   └── e2e.js
 │   ├── fixtures/
 │   │   ├── users.json
 │   │   ├── products.json
+│   │   ├── environments.json
 │   │   └── api/
 │   │       └── postPayloads.json
 │   ├── reports/                   # Relatórios gerados
