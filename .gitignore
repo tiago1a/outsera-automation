@@ -1,3 +1,4 @@
 node_modules
 # Ignorar resultados grandes do K6
 reports/k6-result.json
+cypress/TODO.md
