@@ -4,7 +4,7 @@ import { Trend } from 'k6/metrics';
 
 export const options = {
   vus: 500,              // 500 usuários simultâneos
-  duration: '1m',        // por 5 minutos
+  duration: '5m',        // por 5 minutos
 
   thresholds: {
     http_req_duration: ['p(95)<1000'], // 95% das requisições abaixo de 1s

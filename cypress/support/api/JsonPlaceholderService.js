@@ -1,45 +1,86 @@
+import RequestHelper from './helpers/RequestHelper';
+
 export class JsonPlaceholderService {
-
-  static getPosts() {
-    return cy.request({
-      method: "GET",
-      url: "/posts",
-      //failOnStatusCode: false,
-    })
+  static get baseUrl() {
+    return 'https://jsonplaceholder.typicode.com';
   }
 
-  static getPostById(id) {
+  // ============================================
+  // GET Operations
+  // ============================================
+
+  static getPosts(failOnStatusCode = true) {
     return cy.request({
-      method: "GET",
-      url: `/posts/${id}`,
-      //failOnStatusCode: false,
-    })
+      method: 'GET',
+      url: `${this.baseUrl}/posts`,
+      ...RequestHelper.getGetOptions(failOnStatusCode),
+    });
   }
 
-  static createPost(payload) {
+  static getPostById(id, failOnStatusCode = true) {
     return cy.request({
-      method: "POST",
-      url: "/posts",
-      body: payload,
-      //failOnStatusCode: false,
-    })
+      method: 'GET',
+      url: `${this.baseUrl}/posts/${id}`,
+      ...RequestHelper.getGetOptions(failOnStatusCode),
+    });
   }
 
-  static updatePost(id, payload) {
+  static getPostsByUser(userId, failOnStatusCode = true) {
     return cy.request({
-      method: "PUT",
-      url: `/posts/${id}`,
-      body: payload,
-      //failOnStatusCode: false,
-    })
+      method: 'GET',
+      url: `${this.baseUrl}/posts?userId=${userId}`,
+      ...RequestHelper.getGetOptions(failOnStatusCode),
+    });
   }
 
-  static deletePost(id) {
+  // ============================================
+  // POST Operations
+  // ============================================
+
+  static createPost(body, failOnStatusCode = true) {
     return cy.request({
-      method: "DELETE",
-      url: `/posts/${id}`,
-      //failOnStatusCode: false,
-    })
+      method: 'POST',
+      url: `${this.baseUrl}/posts`,
+      ...RequestHelper.getPostOptions(body, failOnStatusCode),
+    });
+  }
+
+  // ============================================
+  // PUT Operations
+  // ============================================
+
+  static updatePost(id, body, failOnStatusCode = true) {
+    return cy.request({
+      method: 'PUT',
+      url: `${this.baseUrl}/posts/${id}`,
+      ...RequestHelper.getPutOptions(body, failOnStatusCode),
+    });
+  }
+
+  // ============================================
+  // PATCH Operations
+  // ============================================
+
+  static patchPost(id, body, failOnStatusCode = true) {
+    return cy.request({
+      method: 'PATCH',
+      url: `${this.baseUrl}/posts/${id}`,
+      ...RequestHelper.getPatchOptions(body, failOnStatusCode),
+    });
+  }
+
+  // ============================================
+  // DELETE Operations
+  // ============================================
+
+  static deletePost(id, failOnStatusCode = true) {
+    return cy.request({
+      method: 'DELETE',
+      url: `${this.baseUrl}/posts/${id}`,
+      ...RequestHelper.getDeleteOptions(failOnStatusCode),
+    });
   }
 }
+
+export default JsonPlaceholderService;
 

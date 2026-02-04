@@ -37,9 +37,9 @@ Projeto de automação de testes com **Cypress** contendo testes de **API**, **E
 
 ## 🔌 Testes de API
 
-Os testes de API são executados utilizando a **JSONPlaceholder API**, uma API pública para testes.
+Os testes de API são executados utilizando a **JSONPlaceholder API**, com arquitetura escalável e reutilizável.
 
-### 📁 Estrutura dos Testes de API
+### 📁 Arquitetura dos Testes de API
 
 ```
 cypress/
@@ -48,35 +48,137 @@ cypress/
 │       └── users.cy.js           # Testes de API
 ├── support/
 │   └── api/
-│       └── JsonPlaceholderService.js  # Camada de serviço
+│       ├── base/
+│       │   └── BaseService.js    # Classe base para serviços
+│       ├── helpers/
+│       │   ├── ApiAssertions.js  # Assertions reutilizáveis
+│       │   └── RequestHelper.js  # Configurações centralizadas
+│       ├── factories/
+│       │   └── PostFactory.js    # Factory de payloads
+│       └── JsonPlaceholderService.js  # Serviço específico
 └── fixtures/
     └── api/
-        └── postPayloads.json    # Payloads de teste
+        └── postPayloads.json    # Payloads estáticos
+```
+
+### 🏗️ Componentes da Arquitetura
+
+| Componente | Descrição | Benefício |
+|------------|-----------|-----------|
+| **BaseService** | Classe base com métodos HTTP genéricos (get, post, put, patch, delete) | Reutilização entre múltiplos serviços |
+| **JsonPlaceholderService** | Service específico herdando BaseService | Separação de responsabilidades |
+| **ApiAssertions** | 20+ métodos de validação reutilizáveis | Manutenibilidade centralizada |
+| **RequestHelper** | Configurações centralizadas (headers, timeout, URLs) | Facilidade de mudança de ambiente |
+| **PostFactory** | 10+ métodos para criar payloads dinâmicos | Dados de teste flexíveis |
+
+### 🔧 JsonPlaceholderService
+
+```javascript
+import JsonPlaceholderService from '../../support/api/JsonPlaceholderService';
+import ApiAssertions from '../../support/api/helpers/ApiAssertions';
+import PostFactory from '../../support/api/factories/PostFactory';
+
+// GET
+JsonPlaceholderService.getPosts();
+JsonPlaceholderService.getPostById(1);
+JsonPlaceholderService.getPostsByUser(1);
+
+// POST
+JsonPlaceholderService.createPost(payload);
+
+// PUT
+JsonPlaceholderService.updatePost(1, payload);
+
+// PATCH
+JsonPlaceholderService.patchPost(1, payload);
+
+// DELETE
+JsonPlaceholderService.deletePost(1);
+```
+
+### 🎯 ApiAssertions (Exemplos de Uso)
+
+```javascript
+import ApiAssertions from '../../support/api/helpers/ApiAssertions';
+
+// Validações de status
+ApiAssertions.expectStatus(response, 200);
+ApiAssertions.expectSuccess(response);
+ApiAssertions.expectError(response);
+
+// Validações de estrutura
+ApiAssertions.expectArray(response);
+ApiAssertions.expectObject(response);
+ApiAssertions.expectPostStructure(response);
+ApiAssertions.expectPostsArrayStructure(response);
+
+// Validações de propriedades
+ApiAssertions.expectProperty(response, 'id', 1);
+ApiAssertions.expectProperties(response, ['id', 'title', 'body']);
+ApiAssertions.expectCreatedId(response);
+
+// Validações de performance
+ApiAssertions.expectResponseTime(response, 2000);
+```
+
+### 🏭 PostFactory (Exemplos de Uso)
+
+```javascript
+import PostFactory from '../../support/api/factories/PostFactory';
+
+// Payload completo
+const fullPost = PostFactory.createPost();
+// { title: 'Test Post Title', body: '...', userId: 1 }
+
+// Payload mínimo
+const minimalPost = PostFactory.createPostWithOnlyTitle();
+// { title: 'Minimal Post Title' }
+
+// Atualização parcial
+const patchPayload = PostFactory.createPatchPayload();
+// { title: 'Patched Title' }
+
+// Payload com dados personalizados
+const customPost = PostFactory.createPostWithData('Title', 'Body', 1);
+
+// Lista de posts para testes em lote
+const postList = PostFactory.createPostList(5);
 ```
 
 ### ✅ Cenários de Teste Implementados
 
 | Endpoint | Cenários |
 |----------|----------|
-| `GET /posts` | Retornar lista de posts, validar estrutura (keys: userId, id, title, body) |
-| `GET /posts/{id}` | Retornar post específico, retornar 404 para post não existente |
-| `POST /posts` | Criar post com payload válido, tratar payload inválido, criar post com título mínimo |
-| `PUT /posts/{id}` | Atualizar post completamente, atualizar apenas campos específicos |
-| `PATCH /posts/{id}` | Atualização parcial de post, atualizar apenas o body |
-| `DELETE /posts/{id}` | Deletar post, retornar 200 para post não existente |
+| `GET /posts` | Retornar lista, validar estrutura, validar response time |
+| `GET /posts/{id}` | Retornar post específico, retornar 404 para não existente |
+| `GET /posts?userId={id}` | Filtrar posts por userId |
+| `POST /posts` | Criar com payload válido, título mínimo, campos extras, campos vazios |
+| `PUT /posts/{id}` | Atualização completa, atualizar campos específicos |
+| `PATCH /posts/{id}` | Atualização parcial (title), atualização do body, campos mistos |
+| `DELETE /posts/{id}` | Deletar post, deletar post não existente |
+| **Contract** | Validar estrutura de respostas de posts |
 
 ### 📊 Resumo dos Testes de API
 
 | Método | Quantidade de Cenários |
 |--------|------------------------|
-| GET | 4 cenários |
-| POST | 3 cenários |
+| GET | 5 cenários |
+| POST | 4 cenários |
 | PUT | 2 cenários |
-| PATCH | 2 cenários |
-| DELETE | 2 cenários |
-| **Total** | **12 cenários** |
+| PATCH | 3 cenários |
+| DELETE | 3 cenários |
+| Contract | 3 cenários |
+| **Total** | **20 cenários** |
 
 > **⚠️ Observação:** A JSONPlaceholder é uma API simulada. As operações de POST, PUT e DELETE não persistem dados.
+
+### 🚀vantagens da Arquitetura
+
+1. **Escalabilidade:** Adicionar nova API é simples - herdar BaseService e criar novo service
+2. **Manutenção:** Mudar comportamento em um lugar reflete em todos os testes
+3. **Reutilização:** Assertions, helpers e factories funcionam para qualquer service
+4. **Legibilidade:** Testes focam em _o que testar_, não _como testar_
+5. **Test Data Management:** Factory pattern permite criar dados dinâmicos
 
 ---
 
@@ -268,7 +370,7 @@ k6/
 ```javascript
 export const options = {
   vus: 500,              // 500 usuários simultâneos
-  duration: '1m',        // por 1 minuto
+  duration: '5m',        // por 5 minuto
 
   thresholds: {
     http_req_duration: ['p(95)<1000'], // 95% das requisições abaixo de 1s
@@ -368,13 +470,20 @@ outsera-cypress-automation/
 │   ├── api.config.js              # Configuração API
 │   ├── e2e/
 │   │   ├── api/
-│   │   │   └── users.cy.js        # Testes de API
+│   │   │   └── users.cy.js        # Testes de API (refatorado)
 │   │   └── features/
 │   │       ├── login.feature      # Feature Login
 │   │       └── checkout.feature   # Feature Checkout
 │   ├── support/
 │   │   ├── api/
-│   │   │   └── JsonPlaceholderService.js
+│   │   │   ├── base/
+│   │   │   │   └── BaseService.js         # Classe base para serviços
+│   │   │   ├── helpers/
+│   │   │   │   ├── ApiAssertions.js       # Assertions reutilizáveis
+│   │   │   │   └── RequestHelper.js      # Configurações centralizadas
+│   │   │   ├── factories/
+│   │   │   │   └── PostFactory.js        # Factory de payloads
+│   │   │   └── JsonPlaceholderService.js  # Serviço específico
 │   │   ├── step_definitions/
 │   │   │   ├── login.steps.js
 │   │   │   └── checkout.steps.js
