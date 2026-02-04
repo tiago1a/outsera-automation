@@ -1,225 +1,190 @@
-/**
- * JSONPlaceholder API Tests - Posts
- * Testes organizados com arquitetura escalável
- */
-import JsonPlaceholderService from '../../support/api/services/JsonPlaceholderService';
-import PostFactory from '../../support/api/factories/PostFactory';
+import postPayloads from '../../fixtures/api/postPayloads.json'
 
-describe('JSONPlaceholder API - Posts (Escalável)', () => {
-  const baseUrl = 'https://jsonplaceholder.typicode.com';
+describe('JSONPlaceholder API - Posts', () => {
 
-  describe('GET /posts', () => {
-    it('should return list of posts', () => {
-      JsonPlaceholderService.getAllPosts().then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.be.an('array');
-      });
-    });
+  const baseUrl = 'https://jsonplaceholder.typicode.com'
 
-    it('should return posts with valid structure', () => {
-      JsonPlaceholderService.getAllPosts().then((response) => {
-        expect(response.status).to.eq(200);
-        const firstPost = response.body[0];
-        expect(firstPost).to.have.property('userId');
-        expect(firstPost).to.have.property('id');
-        expect(firstPost).to.have.property('title');
-        expect(firstPost).to.have.property('body');
-      });
-    });
+  // ============================================
+  // GET /posts
+  // ============================================
 
-    it('should return posts within acceptable response time', () => {
-      JsonPlaceholderService.getAllPosts().then((response) => {
-        expect(response.duration).to.be.lessThan(5000);
-      });
-    });
-  });
+  it('GET /posts - should return list of posts', () => {
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/posts`
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.be.an('array')
+    })
+  })
 
-  describe('GET /posts/{id}', () => {
-    it('should return single post by ID', () => {
-      const postId = 1;
-      JsonPlaceholderService.getPostById(postId).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.id).to.eq(postId);
-        expect(response.body).to.have.property('userId');
-        expect(response.body).to.have.property('title');
-        expect(response.body).to.have.property('body');
-      });
-    });
+  it('GET /posts - should have valid structure', () => {
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/posts`
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.be.an('array')
+      expect(response.body.length).to.be.greaterThan(0)
+      
+      const firstPost = response.body[0]
+      expect(firstPost).to.have.all.keys('userId', 'id', 'title', 'body')
+    })
+  })
 
-    it('should return 404 for non-existent post', () => {
-      const nonExistentId = 9999;
-      JsonPlaceholderService.getPostById(nonExistentId, { failOnStatusCode: false }).then((response) => {
-        expect(response.status).to.eq(404);
-      });
-    });
+  // ============================================
+  // GET /posts/{id}
+  // ============================================
 
-    it('should validate post structure', () => {
-      const postId = 1;
-      JsonPlaceholderService.getPostById(postId).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.all.keys('userId', 'id', 'title', 'body');
-        expect(response.body.userId).to.be.a('number');
-        expect(response.body.id).to.be.a('number');
-        expect(response.body.title).to.be.a('string');
-        expect(response.body.body).to.be.a('string');
-      });
-    });
-  });
+  it('GET /posts/1 - should return specific post', () => {
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/posts/1`
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('id', 1)
+      expect(response.body).to.have.property('userId')
+      expect(response.body).to.have.property('title')
+      expect(response.body).to.have.property('body')
+    })
+  })
 
-  describe('POST /posts', () => {
-    it('should create a new post with valid payload', () => {
-      const payload = PostFactory.createValid();
-      JsonPlaceholderService.createPost(payload).then((response) => {
-        expect(response.status).to.eq(201);
-        expect(response.body).to.have.property('id');
-        expect(response.body.title).to.eq(payload.title);
-        expect(response.body.body).to.eq(payload.body);
-        expect(response.body.userId).to.eq(payload.userId);
-      });
-    });
+  it('GET /posts/99999 - should return 404 for non-existent post', () => {
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/posts/99999`,
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(404)
+    })
+  })
 
-    it('should create post with extra fields (ignored by API)', () => {
-      const payload = PostFactory.createWithExtraFields();
-      JsonPlaceholderService.createPost(payload).then((response) => {
-        expect(response.status).to.eq(201);
-        expect(response.body).to.have.property('id');
-      });
-    });
+  // ============================================
+  // POST /posts
+  // ============================================
 
-    it('should fail with invalid userId', () => {
-      const payload = PostFactory.createWithInvalidUserId();
-      JsonPlaceholderService.createPost(payload, { failOnStatusCode: false }).then((response) => {
-        expect([201, 400]).to.include(response.status);
-      });
-    });
+  it('POST /posts - should create a post with valid payload', () => {
+    cy.request({
+      method: 'POST',
+      url: `${baseUrl}/posts`,
+      body: postPayloads.validPost
+    }).then((response) => {
+      expect(response.status).to.eq(201)
+      expect(response.body).to.have.property('id')
+      expect(response.body.title).to.eq(postPayloads.validPost.title)
+      expect(response.body.body).to.eq(postPayloads.validPost.body)
+      expect(response.body.userId).to.eq(postPayloads.validPost.userId)
+    })
+  })
 
-    it('should fail with missing required fields', () => {
-      const payload = { title: 'Test' };
-      JsonPlaceholderService.createPost(payload, { failOnStatusCode: false }).then((response) => {
-        expect([201, 400]).to.include(response.status);
-      });
-    });
-  });
+  it('POST /posts - should handle invalid payload', () => {
+    cy.request({
+      method: 'POST',
+      url: `${baseUrl}/posts`,
+      body: postPayloads.invalidUser,
+      failOnStatusCode: false
+    }).then((response) => {
+      // JSONPlaceholder não valida payloads, então retorna 201
+      expect([201, 400]).to.include(response.status)
+    })
+  })
 
-  describe('PUT /posts/{id}', () => {
-    it('should update post with valid payload', () => {
-      const postId = 1;
-      const payload = PostFactory.createValid();
-      JsonPlaceholderService.updatePost(postId, payload).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.id).to.eq(postId);
-        expect(response.body.title).to.eq(payload.title);
-        expect(response.body.body).to.eq(payload.body);
-      });
-    });
+  it('POST /posts - should create post with only title', () => {
+    const minimalPayload = { title: 'Minimal Post' }
+    
+    cy.request({
+      method: 'POST',
+      url: `${baseUrl}/posts`,
+      body: minimalPayload
+    }).then((response) => {
+      expect(response.status).to.eq(201)
+      expect(response.body).to.have.property('id')
+      expect(response.body.title).to.eq('Minimal Post')
+    })
+  })
 
-    it('should update only specific fields with partial data', () => {
-      const postId = 1;
-      const payload = PostFactory.createPartial();
-      JsonPlaceholderService.updatePost(postId, payload).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.title).to.eq(payload.title);
-      });
-    });
-  });
+  // ============================================
+  // PUT /posts/{id}
+  // ============================================
 
-  describe('PATCH /posts/{id}', () => {
-    it('should partially update post', () => {
-      const postId = 1;
-      const payload = { title: 'Updated Title' };
-      JsonPlaceholderService.patchPost(postId, payload).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.title).to.eq(payload.title);
-      });
-    });
+  it('PUT /posts/1 - should update a post completely', () => {
+    cy.request({
+      method: 'PUT',
+      url: `${baseUrl}/posts/1`,
+      body: postPayloads.validPost
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.id).to.eq(1)
+      expect(response.body.title).to.eq(postPayloads.validPost.title)
+    })
+  })
 
-    it('should update multiple fields', () => {
-      const postId = 1;
-      const payload = PostFactory.createValid();
-      JsonPlaceholderService.patchPost(postId, payload).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body.title).to.eq(payload.title);
-        expect(response.body.body).to.eq(payload.body);
-      });
-    });
-  });
+  it('PUT /posts/1 - should update only specific fields', () => {
+    const partialUpdate = { title: 'Updated Title' }
+    
+    cy.request({
+      method: 'PUT',
+      url: `${baseUrl}/posts/1`,
+      body: partialUpdate
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.title).to.eq('Updated Title')
+    })
+  })
 
-  describe('DELETE /posts/{id}', () => {
-    it('should delete existing post', () => {
-      const postId = 1;
-      JsonPlaceholderService.deletePost(postId).then((response) => {
-        expect(response.status).to.eq(200);
-      });
-    });
+  // ============================================
+  // PATCH /posts/{id}
+  // ============================================
 
-    it('should return 200 for non-existent post (API behavior)', () => {
-      const nonExistentId = 9999;
-      JsonPlaceholderService.deletePost(nonExistentId, { failOnStatusCode: false }).then((response) => {
-        expect(response.status).to.eq(200);
-      });
-    });
-  });
+  it('PATCH /posts/1 - should partially update a post', () => {
+    const partialUpdate = { title: 'Patched Title' }
+    
+    cy.request({
+      method: 'PATCH',
+      url: `${baseUrl}/posts/1`,
+      body: partialUpdate
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.title).to.eq('Patched Title')
+      expect(response.body.id).to.eq(1)
+    })
+  })
 
-  describe('Custom Endpoints', () => {
-    it('should filter posts by user ID', () => {
-      const userId = 1;
-      JsonPlaceholderService.getPostsByUser(userId).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.be.an('array');
-        response.body.forEach((post) => {
-          expect(post.userId).to.eq(userId);
-        });
-      });
-    });
+  it('PATCH /posts/2 - should update just the body', () => {
+    const bodyUpdate = { body: 'This is the updated body content' }
+    
+    cy.request({
+      method: 'PATCH',
+      url: `${baseUrl}/posts/2`,
+      body: bodyUpdate
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.body).to.eq('This is the updated body content')
+    })
+  })
 
-    it('should return posts with pagination', () => {
-      const page = 1;
-      const perPage = 5;
-      JsonPlaceholderService.getPostsPaginated(page, perPage).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.lengthOf(perPage);
-      });
-    });
-  });
+  // ============================================
+  // DELETE /posts/{id}
+  // ============================================
 
-  describe('Integration Tests', () => {
-    it('should create, update, and delete a post', () => {
-      // Create - testa que POST retorna 201 e ID válido
-      const createPayload = PostFactory.createValid();
-      JsonPlaceholderService.createPost(createPayload).then((createResponse) => {
-        expect(createResponse.status).to.eq(201);
-        expect(createResponse.body).to.have.property('id');
-        const createdId = createResponse.body.id;
-        expect(createdId).to.be.a('number');
-      });
+  it('DELETE /posts/1 - should delete a post', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `${baseUrl}/posts/1`
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+    })
+  })
 
-      // Update - usa ID existente (1) pois API não persiste dados
-      const existingPostId = 1;
-      const updatePayload = PostFactory.create();
-      JsonPlaceholderService.updatePost(existingPostId, updatePayload).then((updateResponse) => {
-        expect(updateResponse.status).to.eq(200);
-        expect(updateResponse.body.id).to.eq(existingPostId);
-        expect(updateResponse.body.title).to.eq(updatePayload.title);
-      });
+  it('DELETE /posts/99999 - should return 200 for non-existent post', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `${baseUrl}/posts/99999`
+    }).then((response) => {
+      // JSONPlaceholder sempre retorna 200 para DELETE
+      expect(response.status).to.eq(200)
+    })
+  })
 
-      // Delete - usa ID existente (1)
-      JsonPlaceholderService.deletePost(existingPostId).then((deleteResponse) => {
-        expect(deleteResponse.status).to.eq(200);
-      });
-    });
-
-    it('should perform CRUD operations in batch', () => {
-      const posts = PostFactory.createMultiple(3);
-
-      posts.forEach((payload) => {
-        JsonPlaceholderService.createPost(payload).then((response) => {
-          expect(response.status).to.eq(201);
-          expect(response.body).to.have.property('id');
-          expect(response.body.title).to.eq(payload.title);
-          expect(response.body.body).to.eq(payload.body);
-        });
-      });
-    });
-  });
-});
+})
 

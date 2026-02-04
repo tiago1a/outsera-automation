@@ -13,7 +13,7 @@ Projeto de automação de testes com **Cypress** contendo testes de **API**, **E
 
 | Tipo | Descrição | Status |
 |------|-----------|--------|
-| 🔌 **API Tests** | Testes de API escaláveis com JSONPlaceholder | ✅ |
+| 🔌 **API Tests** | Testes de API com JSONPlaceholder | ✅ |
 | 🌐 **E2E Tests** | Testes end-to-end com SauceDemo (Cucumber/BDD) | ✅ |
 | ⚡ **Load Tests** | Testes de carga com K6 | ✅ |
 | ⚡ **CI/CD** | Integração contínua com GitHub Actions | ✅ |
@@ -35,181 +35,35 @@ Projeto de automação de testes com **Cypress** contendo testes de **API**, **E
 
 ---
 
-## 🔌 Testes de API (Arquitetura Escalável)
+## 🔌 Testes de API
 
-Os testes de API são desenvolvidos com uma **arquitetura escalável** que maximiza o reaproveitamento de código e facilita a manutenção.
+Os testes de API são executados utilizando a **JSONPlaceholder API**, uma API pública para testes.
 
-### 📁 Estrutura do Projeto de API
+### 📁 Estrutura dos Testes de API
 
 ```
 cypress/
 ├── e2e/
 │   └── api/
-│       └── users.cy.js              # Testes organizados por suites
+│       └── users.cy.js
 ├── support/
 │   └── api/
-│       ├── base/
-│       │   └── BaseService.js       # Classe base com métodos HTTP genéricos
-│       ├── helpers/
-│       │   ├── ApiAssertions.js     # Assertions reutilizáveis
-│       │   └── RequestHelper.js     # Configurações de requisição
-│       ├── factories/
-│       │   └── PostFactory.js      # Factory para criação de payloads
-│       └── services/
-│           └── JsonPlaceholderService.js  # Service específico
+│       └── JsonPlaceholderService.js
 └── fixtures/
     └── api/
-        └── schemas/
-            └── posts.schema.json    # JSON Schemas para validação
-```
-
-### 🏗️ Arquitetura
-
-```
-                    ┌─────────────────────────────────────┐
-                    │         users.cy.js                │
-                    │     (Test Suites - BDD Style)       │
-                    └──────────────┬──────────────────────┘
-                                   │
-                    ┌──────────────▼──────────────────────┐
-                    │      JsonPlaceholderService         │
-                    │      (Service Layer)               │
-                    └──────────────┬──────────────────────┘
-                                   │
-          ┌────────────────────────┼────────────────────────┐
-          │                        │                        │
-┌─────────▼─────────┐  ┌─────────▼─────────┐  ┌─────────▼─────────┐
-│    BaseService     │  │    PostFactory     │  │   ApiAssertions   │
-│  (HTTP Methods)    │  │  (Data Builders)  │  │  (Validations)    │
-└───────────────────┘  └───────────────────┘  └───────────────────┘
-```
-
-### 🔧 Componentes da Arquitetura
-
-#### 1. BaseService
-Classe base com métodos HTTP genéricos reutilizáveis:
-
-```javascript
-class BaseService {
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl;
-  }
-
-  get(endpoint, options = {}) { }
-  post(endpoint, body, options = {}) { }
-  put(endpoint, body, options = {}) { }
-  patch(endpoint, body, options = {}) { }
-  delete(endpoint, options = {}) { }
-  withAuth(endpoint, options = {}, token) { }
-}
-```
-
-#### 2. JsonPlaceholderService
-Service específico que herda do BaseService:
-
-```javascript
-class JsonPlaceholderService extends BaseService {
-  constructor() {
-    super('https://jsonplaceholder.typicode.com');
-  }
-
-  // CRUD Operations
-  getAllPosts(options = {}) { }
-  getPostById(id, options = {}) { }
-  createPost(payload, options = {}) { }
-  updatePost(id, payload, options = {}) { }
-  patchPost(id, payload, options = {}) { }
-  deletePost(id, options = {}) { }
-
-  // Custom Endpoints
-  getPostsByUser(userId, options = {}) { }
-  getPostsPaginated(page, perPage, options = {}) { }
-
-  // Test Helpers
-  async createPostAndGetId(payload) { }
-  async verifyPostExists(id) { }
-  async verifyPostDeleted(id) { }
-  validatePostStructure(response) { }
-}
-```
-
-#### 3. ApiAssertions
-Assertions centralizados e reutilizáveis:
-
-```javascript
-class ApiAssertions {
-  static expectStatus(response, expectedStatus) { }
-  static expectSuccess(response) { }
-  static expectResponseTime(response, maxMs) { }
-  static expectArray(response, property = null) { }
-  static expectObject(response, property = null) { }
-  static expectProperty(response, property, value = null) { }
-  static expectProperties(response, properties) { }
-  static expectCreatedId(response) { }
-  static expectPagination(response) { }
-  static expectArrayLength(response, expectedLength, property = null) { }
-}
-```
-
-#### 4. PostFactory
-Factory para geração dinâmica de payloads:
-
-```javascript
-class PostFactory {
-  createValid() { }
-  createWithEmptyTitle() { }
-  createWithEmptyBody() { }
-  createWithInvalidUserId() { }
-  createWithExtraFields() { }
-  createPartial() { }
-  createMultiple(count = 3) { }
-  create(customData = {}) { }
-}
-```
-
-#### 5. RequestHelper
-Configurações centralizadas de requisições:
-
-```javascript
-class RequestHelper {
-  getDefaultHeaders() { }
-  getAuthHeaders(token) { }
-  getBaseOptions(additionalOptions = {}) { }
-  getOptionalOptions() { }
-  getTimeoutOptions(timeout = 30000) { }
-  buildUrlWithParams(baseUrl, endpoint, params = {}) { }
-}
+        └── postPayloads.json
 ```
 
 ### ✅ Cenários de Teste Implementados
 
-| Suite | Cenários |
-|-------|----------|
-| **GET /posts** | Lista de posts, estrutura válida, response time |
-| **GET /posts/{id}** | Post por ID, 404 para inexistente, validação estrutura |
-| **POST /posts** | Criação válida, campos extras, ID inválido, campos faltantes |
-| **PUT /posts/{id}** | Update completo, update parcial |
-| **PATCH /posts/{id}** | Update parcial, múltiplos campos |
-| **DELETE /posts/{id}** | Delete existente, delete inexistente |
-| **Custom** | Filtro por usuário, paginação |
-| **Integration** | CRUD completo, operações em lote |
+| Endpoint | Cenários |
+|----------|----------|
+| `GET /posts` | Validação status 200, retorno em lista |
+| `POST /posts` | Validação status 201, estrutura do objeto criado |
+| `PUT /posts/{id}` | Validação status 200, campos atualizados |
+| `DELETE /posts/{id}` | Validação status 200 |
 
-### 📊 JSON Schema para Validação de Contratos
-
-```json
-{
-  "title": "Post",
-  "type": "object",
-  "required": ["userId", "id", "title", "body"],
-  "properties": {
-    "userId": { "type": "integer" },
-    "id": { "type": "integer" },
-    "title": { "type": "string", "minLength": 1 },
-    "body": { "type": "string", "minLength": 1 }
-  },
-  "additionalProperties": false
-}
-```
+> **⚠️ Observação:** A JSONPlaceholder é uma API simulada. As operações de POST, PUT e DELETE não persistem dados.
 
 ---
 
@@ -230,30 +84,121 @@ cypress/
 │   │   ├── LoginPage.js
 │   │   ├── ProductsPage.js
 │   │   └── CheckoutPage.js
-│   └── step_definitions/
-│       ├── login.steps.js
-│       └── checkout.steps.js
+│   ├── step_definitions/
+│   │   ├── login.steps.js
+│   │   └── checkout.steps.js
+│   ├── constants/
+│   │   └── Messages.js
+│   └── helpers/
+│       └── AssertionHelper.js
 └── fixtures/
-    └── users.json
+    ├── users.json
+    └── products.json
 ```
 
-### 📝 Features
+### 🎯 Padrões Implementados nos Testes E2E
 
-**Login Feature:**
-- Login com credenciais válidas
-- Login com senha inválida
-- Login com campos obrigatórios em branco
+| Padrão | Descrição | Benefício |
+|--------|-----------|-----------|
+| **Page Object Model** | Separação de UI e lógica de teste | Facilidade de manutenção |
+| **Constants** | Centralização de mensagens e URLs | Facilidade de atualização |
+| **AssertionHelper** | Validações reutilizáveis | Código mais limpo |
+| **Fixtures Estruturados** | Dados de teste organizados | Facilidade de manutenção |
 
-**Checkout Feature:**
-- Finalizar compra com dados válidos
-- Finalizar compra com dados inválidos
+### 📝 Feature: Login
+
+```gherkin
+@login @smoke
+Feature: Login na aplicação
+  Como um usuário da aplicação
+  Quero realizar login
+  Para acessar páginas restritas
+
+  @positive
+  Scenario: Login com credenciais válidas
+    Given que estou na página de login
+    When informo usuário e senha válidos
+    Then devo ser redirecionado para a página de produtos
+
+  @negative
+  Scenario: Login com senha inválida
+    Given que estou na página de login
+    When informo usuário válido e senha inválida
+    Then devo visualizar uma mensagem de erro
+```
+
+### 📝 Feature: Checkout
+
+```gherkin
+@checkout @smoke
+Feature: Checkout de compra
+  Como um usuário da aplicação
+  Quero finalizar minha compra
+  Para completar o processo de compra
+
+  Background:
+    Given que estou logado na aplicação
+    And adiciono um produto ao carrinho
+    And acesso o carrinho de compras
+    And clico no botão de checkout
+
+  @positive
+  Scenario: Finalizar compra com dados válidos
+    When preencho os dados de pagamento corretamente
+    And finalizo a compra
+    Then a compra deve ser finalizada com sucesso
+```
 
 ### 🔧 Page Objects
 
-O projeto utiliza padrão **Page Object Model**:
-- **LoginPage.js** - Elementos e ações da página de login
-- **ProductsPage.js** - Elementos e ações da página de produtos
-- **CheckoutPage.js** - Elementos e ações do checkout
+O projeto utiliza padrão **Page Object Model** para melhor organização:
+
+```javascript
+// LoginPage.js
+class LoginPage {
+  elements = {
+    usernameField: '[data-test="username"]',
+    passwordField: '[data-test="password"]',
+    loginButton: '[data-test="login-button"]',
+    errorMessage: '[data-test="error"]',
+  };
+
+  login(username, password) {
+    this.fillUsername(username);
+    this.fillPassword(password);
+    this.clickLogin();
+    return this;
+  }
+
+  loginWithFixture(userType) {
+    cy.fixture("users").then((users) => {
+      const user = users[userType];
+      this.fillUsername(user.username);
+      this.fillPassword(user.password);
+      this.clickLogin();
+    });
+    return this;
+  }
+}
+```
+
+### 📋 Constants Centralizadas
+
+```javascript
+// Messages.js
+export const ERROR_MESSAGES = {
+  REQUIRED_FIELD: "Error: First Name is required",
+  INVALID_CREDENTIALS: "Epic sadface: Username and password do not match any user in this service",
+  LOCKED_OUT_USER: "Epic sadface: Sorry, this user has been locked out.",
+};
+
+export const URLs = {
+  LOGIN: "",
+  INVENTORY: "inventory.html",
+  CART: "cart.html",
+  CHECKOUT_STEP_ONE: "checkout-step-one.html",
+};
+```
 
 ---
 
@@ -266,8 +211,7 @@ Os testes de carga são realizados com **K6**, avaliando o comportamento de APIs
 ```
 k6/
 ├── users-load-test.js    # Teste de carga principal
-├── README.md             # Documentação K6
-└── reports/              # Relatórios gerados
+└── README.md            # Documentação K6
 ```
 
 ### 🔧 Configuração do Teste
@@ -278,29 +222,21 @@ export const options = {
   duration: '1m',        // por 1 minuto
 
   thresholds: {
-    http_req_duration: ['p(95)<1000'], // 95% das requisições < 1s
+    http_req_duration: ['p(95)<1000'], // 95% das requisições abaixo de 1s
     http_req_failed: ['rate<0.01'],    // menos de 1% de erro
   },
 };
 ```
 
-### ✅ Cenários de Teste
-
-| Cenário | Configuração |
-|---------|--------------|
-| Usuários Simultâneos | 500 VUs |
-| Duração | 1 minuto |
-| API Testada | https://reqres.in/api/users |
-| Threshold | 95% das requisições < 1s |
-| Taxa de Erro | < 1% |
-
 ### ▶️ Executar Testes de Carga
 
 ```bash
+# Executar teste de carga básico
+npm run test:load
+
+# Executar e gerar relatório completo
 npm run test:load:report
 ```
-
-O relatório HTML será gerado em: `reports/k6-report.html`
 
 ---
 
@@ -319,14 +255,6 @@ Push/PR → Checkout → Setup Node.js → Install Dependencies
     → Run All Tests → Upload Reports → Upload Screenshots (on failure)
     → Upload Videos (on failure)
 ```
-
-### 📂 Artefatos Gerados
-
-| Artefato | Descrição |
-|----------|-----------|
-| `cypress-reports` | Relatórios Cypress |
-| `cypress-screenshots` | Screenshots em caso de falha |
-| `cypress-videos` | Vídeos da execução dos testes |
 
 ---
 
@@ -356,7 +284,7 @@ npm run test:ui
 npm run test:load:report
 ```
 
-### 5️⃣ Executar todos os testes Cypress
+### 5️⃣ Executar todos os testes
 
 ```bash
 npx cypress run
@@ -368,7 +296,7 @@ npx cypress run
 npm run cypress:open
 ```
 
-### 📊 Gerar Relatório Consolidado (Cypress)
+### 7️⃣ Gerar Relatório Consolidado
 
 ```bash
 npm run report:merge
@@ -391,21 +319,13 @@ outsera-cypress-automation/
 │   ├── api.config.js              # Configuração API
 │   ├── e2e/
 │   │   ├── api/
-│   │   │   └── users.cy.js
+│   │   │   └── users.cy.js      # Testes de API
 │   │   └── features/
-│   │       ├── login.feature
-│   │       └── checkout.feature
+│   │       ├── login.feature     # Feature Login
+│   │       └── checkout.feature  # Feature Checkout
 │   ├── support/
 │   │   ├── api/
-│   │   │   ├── base/
-│   │   │   │   └── BaseService.js
-│   │   │   ├── helpers/
-│   │   │   │   ├── ApiAssertions.js
-│   │   │   │   └── RequestHelper.js
-│   │   │   ├── factories/
-│   │   │   │   └── PostFactory.js
-│   │   │   └── services/
-│   │   │       └── JsonPlaceholderService.js
+│   │   │   └── JsonPlaceholderService.js
 │   │   ├── pages/
 │   │   │   ├── LoginPage.js
 │   │   │   ├── ProductsPage.js
@@ -413,21 +333,22 @@ outsera-cypress-automation/
 │   │   ├── step_definitions/
 │   │   │   ├── login.steps.js
 │   │   │   └── checkout.steps.js
+│   │   ├── constants/
+│   │   │   └── Messages.js
+│   │   ├── helpers/
+│   │   │   └── AssertionHelper.js
 │   │   ├── commands.js
 │   │   └── e2e.js
 │   ├── fixtures/
 │   │   ├── users.json
-│   │   ├── api/
-│   │   │   ├── postPayloads.json
-│   │   │   └── schemas/
-│   │   │       └── posts.schema.json
+│   │   └── products.json
 │   ├── reports/                   # Relatórios gerados
-│   ├── screenshots/               # Screenshots de falhas
-│   └── videos/                    # Vídeos dos testes
+│   ├── screenshots/              # Screenshots de falhas
+│   └── videos/                   # Vídeos dos testes
 ├── k6/
-│   ├── users-load-test.js         # Teste de carga K6
-│   └── README.md                  # Documentação K6
-├── reports/                       # Relatórios consolidados
+│   ├── users-load-test.js        # Teste de carga K6
+│   └── README.md                 # Documentação K6
+├── reports/                      # Relatórios consolidados
 ├── package.json
 ├── package-lock.json
 └── README.md
@@ -435,27 +356,13 @@ outsera-cypress-automation/
 
 ---
 
-## 📌 Benefícios da Arquitetura
-
-| Benefício | Descrição |
-|-----------|-----------|
-| 🔄 **Reaproveitamento** | Classes base e helpers usados em múltiplos testes |
-| 📦 **Manutenção** | Alterações centralizadas em um único lugar |
-| 🎯 **Separação** | Responsabilidades bem definidas entre camadas |
-| 📊 **Validação** | Schemas JSON para contratos de API |
-| 🔧 **Extensibilidade** | Adição de novas APIs de forma simples |
-| 🧪 **Qualidade** | Factory pattern para dados consistentes |
-| 📈 **Performance** | Configurações otimizadas de requisições |
-
----
-
 ## 📌 Considerações Finais
 
-- **API Tests:** Arquitetura escalável com Service Layer, Factory Pattern e Assertions centralizados
+- **API Tests:** Testes funcionais de API com JSONPlaceholder
 - **E2E Tests:** Padrão Page Object Model com BDD (Cucumber)
 - **Load Tests:** Testes de performance com K6 (500 VUs, thresholds configurados)
 - **CI/CD:** Integração completa com GitHub Actions
-- **Reports:** Relatórios automatizados com Mochawesome e K6 HTML Reporter
+- **Reports:** Relatórios automatizados com Mochawesome
 - **Qualidade:** Foco em confiabilidade e boas práticas de automação
 
 ---

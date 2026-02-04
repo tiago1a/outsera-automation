@@ -1,0 +1,15 @@
+{
+  "production": {
+    "baseUrl": "https://www.saucedemo.com",
+    "timeout": 30000
+  },
+  "staging": {
+    "baseUrl": "https://www.saucedemo.com",
+    "timeout": 30000
+  },
+  "development": {
+    "baseUrl": "https://www.saucedemo.com",
+    "timeout": 30000
+  }
+}
+

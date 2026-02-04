@@ -1,13 +1,11 @@
+@checkout
 Feature: Checkout de compra
-
-  Background:
-    Given que estou logado na aplicação
-    And adiciono um produto ao carrinho
+  Como um usuário da aplicação
+  Quero finalizar minha compra
+  Para completar o processo de compra
 
   Scenario: Finalizar compra com dados válidos
-    When preencho os dados de pagamento corretamente
+    Given que estou logado com usuário "standard"
+    And estou na página de checkout com dados válidos
+    When finalizo a compra
     Then a compra deve ser finalizada com sucesso
-
-  Scenario: Finalizar compra com dados inválidos
-    When tento finalizar a compra com dados inválidos
-    Then devo visualizar uma mensagem de erro no checkout

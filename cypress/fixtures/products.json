@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": "sauce-labs-backpack",
+      "name": "Sauce Labs Backpack",
+      "price": 29.99,
+      "description": "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.",
+      "category": "backpack"
+    },
+    {
+      "id": "sauce-labs-bike-light",
+      "name": "Sauce Labs Bike Light",
+      "price": 9.99,
+      "description": "A red light isn't the desired state in testing but it sure helps when riding your bike at night.",
+      "category": "accessories"
+    },
+    {
+      "id": "sauce-labs-bolt-t-shirt",
+      "name": "Sauce Labs Bolt T-Shirt",
+      "price": 15.99,
+      "description": "Get your testing superhero swagger on with this Sauce Labs bolt t-shirt.",
+      "category": "t-shirt"
+    },
+    {
+      "id": "sauce-labs-fleece-jacket",
+      "name": "Sauce Labs Fleece Jacket",
+      "price": 49.99,
+      "description": "It's not every day that you come across a midweight quarter-zip fleece jacket to deal with temperature swings.",
+      "category": "jacket"
+    },
+    {
+      "id": "sauce-labs-onesie",
+      "name": "Sauce Labs Onesie",
+      "price": 7.99,
+      "description": "Rib snap onesies for the junior automation engineers you're trying so hard to keep away from making a mess.",
+      "category": "onesie"
+    },
+    {
+      "id": "test-all-the-things-t-shirt-red",
+      "name": "Test.allTheThings() T-Shirt",
+      "price": 15.99,
+      "description": "This classic Sauce Labs t-shirt is perfect!  When you just need to wear a cool t-shirt.",
+      "category": "t-shirt"
+    }
+  ],
+  "checkout": {
+    "valid": {
+      "firstName": "Tiago",
+      "lastName": "Amaro",
+      "postalCode": "12345-678",
+      "description": "Dados válidos para checkout"
+    },
+    "invalid": {
+      "firstName": "",
+      "lastName": "",
+      "postalCode": "",
+      "description": "Campos vazios para teste de validação"
+    },
+    "partial": {
+      "firstName": "Tiago",
+      "lastName": "Amaro",
+      "postalCode": "",
+      "description": "Apenas primeiro nome e último nome"
+    }
+  }
+}
+

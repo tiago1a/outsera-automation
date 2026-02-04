@@ -1,1 +1,38 @@
-    
+{
+  "standard": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "description": "Usuário padrão com acesso completo"
+  },
+  "locked_out": {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "description": "Usuário bloqueado - não consegue fazer login"
+  },
+  "problem": {
+    "username": "problem_user",
+    "password": "secret_sauce",
+    "description": "Usuário com problemas na aplicação"
+  },
+  "performance_glitch": {
+    "username": "performance_glitch_user",
+    "password": "secret_sauce",
+    "description": "Usuário para testar performance"
+  },
+  "invalid": {
+    "username": "invalid_user",
+    "password": "wrong_password",
+    "description": "Credenciais inválidas"
+  },
+  "empty": {
+    "username": "",
+    "password": "",
+    "description": "Campos vazios"
+  },
+  "invalid_password": {
+    "username": "standard_user",
+    "password": "wrong_password",
+    "description": "Senha inválida"
+  }
+}
+

@@ -1,34 +1,58 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import { LoginPage } from "../pages/LoginPage";
+import LoginPage from "../../support/e2e/pages/LoginPage";
+import { ERROR_MESSAGES } from "../../support/e2e/constants/Messages";
 
 const loginPage = new LoginPage();
 
-// Cenário: acessar a página de login
+// ============================================
+// GIVEN - Pré-condições
+// ============================================
+
 Given("que estou na página de login", () => {
+  loginPage.visit().verifyOnLoginPage();
+});
+
+Given("que estou logado com usuário {string}", (userType) => {
   loginPage.visit();
+  loginPage.loginWithFixture(userType);
 });
 
-// Cenário positivo: login válido
+// ============================================
+// WHEN - Ações de Login
+// ============================================
+
 When("informo usuário e senha válidos", () => {
-  loginPage.login("standard_user", "secret_sauce");
+  loginPage.loginWithFixture("standard");
 });
 
-// Cenário negativo: senha inválida
+When("informo usuário {string} e senha {string}", (username, password) => {
+  loginPage.login(username, password);
+});
+
 When("informo usuário válido e senha inválida", () => {
-  loginPage.login("standard_user", "senha_invalida");
+  loginPage.loginWithFixture("invalid_password");
 });
 
-// Cenário negativo: campos vazios
 When("tento realizar login sem preencher os campos", () => {
-  loginPage.submit();
+  loginPage.submitEmptyForm();
 });
 
-// Validação positiva: redirecionamento para inventory
+// ============================================
+// THEN - Validações
+// ============================================
+
 Then("devo ser redirecionado para a página de produtos", () => {
-  cy.url().should("include", "inventory");
+  cy.url().should("include", "/inventory");
 });
 
-// Validação negativa: mensagem de erro visível
 Then("devo visualizar uma mensagem de erro", () => {
-  loginPage.getErrorMessage().should("be.visible");
+  loginPage.verifyErrorMessage(ERROR_MESSAGES.INVALID_CREDENTIALS);
+});
+
+Then("devo visualizar a mensagem {string}", (message) => {
+  cy.contains("[data-test='error']", message).should("be.visible");
+});
+
+Then("devo visualizar a mensagem de erro de campo obrigatório", () => {
+  loginPage.verifyErrorMessage(ERROR_MESSAGES.USERNAME_REQUIRED);
 });

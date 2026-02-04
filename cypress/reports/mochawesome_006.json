@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-02-04T14:57:34.893Z",
+    "end": "2026-02-04T14:57:36.236Z",
+    "duration": 1343,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "ef1fdd8e-734b-4f3b-a636-1e50d6a4ebba",
+      "title": "",
+      "fullFile": "cypress/e2e/api/users.cy.js",
+      "file": "cypress/e2e/api/users.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+          "title": "JSONPlaceholder API - Posts",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "POST /posts - should create a post (valid payload)",
+              "fullTitle": "JSONPlaceholder API - Posts POST /posts - should create a post (valid payload)",
+              "timedOut": null,
+              "duration": 304,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request({\n  method: 'POST',\n  url: `${baseUrl}/posts`,\n  body: _postPayloads.default.validPost\n}).then(response => {\n  expect(response.status).to.eq(201);\n  expect(response.body).to.have.property('id');\n  expect(response.body.title).to.eq(_postPayloads.default.validPost.title);\n});",
+              "err": {},
+              "uuid": "497843e0-5b00-40a2-ba33-9e1d3a65d651",
+              "parentUUID": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "POST /posts - should fail with invalid payload",
+              "fullTitle": "JSONPlaceholder API - Posts POST /posts - should fail with invalid payload",
+              "timedOut": null,
+              "duration": 223,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request({\n  method: 'POST',\n  url: `${baseUrl}/posts`,\n  body: _postPayloads.default.invalidUser,\n  failOnStatusCode: false\n}).then(response => {\n  // JSONPlaceholder não valida de verdade, mas você pode simular o cenário\n  expect([201, 400]).to.include(response.status);\n});",
+              "err": {},
+              "uuid": "e22ad668-8d1b-4242-8a5c-2b41d417f04e",
+              "parentUUID": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "GET /posts - should return list of posts",
+              "fullTitle": "JSONPlaceholder API - Posts GET /posts - should return list of posts",
+              "timedOut": null,
+              "duration": 66,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request({\n  method: 'GET',\n  url: `${baseUrl}/posts`\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body).to.be.an('array');\n});",
+              "err": {},
+              "uuid": "b4ce6d1e-c2df-4cdd-b0b7-96a216af606f",
+              "parentUUID": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "PUT /posts/{id} - should update a post",
+              "fullTitle": "JSONPlaceholder API - Posts PUT /posts/{id} - should update a post",
+              "timedOut": null,
+              "duration": 437,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request({\n  method: 'PUT',\n  url: `${baseUrl}/posts/1`,\n  body: _postPayloads.default.validPost\n}).then(response => {\n  expect(response.status).to.eq(200);\n  expect(response.body.title).to.eq(_postPayloads.default.validPost.title);\n});",
+              "err": {},
+              "uuid": "40ceff20-a5ca-4358-9d48-c322733b5d56",
+              "parentUUID": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "DELETE /posts/{id} - should delete a post",
+              "fullTitle": "JSONPlaceholder API - Posts DELETE /posts/{id} - should delete a post",
+              "timedOut": null,
+              "duration": 173,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request({\n  method: 'DELETE',\n  url: `${baseUrl}/posts/1`\n}).then(response => {\n  expect(response.status).to.eq(200);\n});",
+              "err": {},
+              "uuid": "d130188c-8cdb-48e6-b909-b9c7f7a78d70",
+              "parentUUID": "5347ca2c-a431-41c4-b6e7-d9c356c12da5",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "497843e0-5b00-40a2-ba33-9e1d3a65d651",
+            "e22ad668-8d1b-4242-8a5c-2b41d417f04e",
+            "b4ce6d1e-c2df-4cdd-b0b7-96a216af606f",
+            "40ceff20-a5ca-4358-9d48-c322733b5d56",
+            "d130188c-8cdb-48e6-b909-b9c7f7a78d70"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1203,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
